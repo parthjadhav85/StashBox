@@ -5,15 +5,15 @@ import TopNavbar from './TopNavbar.jsx'
 import BookmarkListPane from './BookmarkListPane.jsx'
 import BookmarkDetailPane from './BookmarkDetailPane.jsx'
 import AddBookmarkModal from '../modals/AddBookmarkModal.jsx'
+import EditBookmarkModal from '../modals/EditBookmarkModal.jsx'
 import CreateCollectionModal from '../modals/CreateCollectionModal.jsx'
 import CollectionEditModal from '../modals/CollectionEditModal.jsx'
 import SettingsModal from '../modals/SettingsModal.jsx'
 import { AlertCircle, X } from 'lucide-react'
 
 export default function AppLayout() {
-  const [activeView, setActiveView] = useState('all') // 'all', 'unsorted', 'favorites', 'archive', 'collection', 'tag'
+  const [activeView, setActiveView] = useState('all') // 'all', 'unsorted', 'favorites', 'archive', 'collection'
   const [selectedCollectionId, setSelectedCollectionId] = useState(null)
-  const [selectedTag, setSelectedTag] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [viewMode, setViewMode] = useState('masonry') // 'masonry' | 'list' | 'grid'
   const [sortBy, setSortBy] = useState('date_desc')
@@ -22,6 +22,7 @@ export default function AppLayout() {
   // Mobile drawer & Modals
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const [editingBookmark, setEditingBookmark] = useState(null)
   const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false)
   const [parentForNewNested, setParentForNewNested] = useState(null)
   const [editingCollection, setEditingCollection] = useState(null)
@@ -30,7 +31,6 @@ export default function AppLayout() {
   // Live Data State
   const [bookmarks, setBookmarks] = useState([])
   const [collections, setCollections] = useState([])
-  const [tags, setTags] = useState([])
   const [isLoadingBookmarks, setIsLoadingBookmarks] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -39,8 +39,8 @@ export default function AppLayout() {
   // Global Keyboard Shortcuts
   useEffect(() => {
     const handleKeyDown = (e) => {
-      const tag = document.activeElement?.tagName?.toLowerCase()
-      if (tag === 'input' || tag === 'textarea' || tag === 'select') return
+      const activeTag = document.activeElement?.tagName?.toLowerCase()
+      if (activeTag === 'input' || activeTag === 'textarea' || activeTag === 'select') return
 
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault()
@@ -57,21 +57,19 @@ export default function AppLayout() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isAddModalOpen, isCollectionModalOpen, isSettingsOpen, selectedBookmark])
 
-  // Load Bookmarks, Collections & Tags from Backend
+  // Load Bookmarks & Collections from Backend
   const loadData = useCallback(async () => {
     try {
       setIsLoadingBookmarks(true)
       setErrorMessage('')
 
-      const [bookmarksRes, collectionsRes, tagsRes] = await Promise.all([
+      const [bookmarksRes, collectionsRes] = await Promise.all([
         api.bookmarks.getAll().catch(() => ({ bookmarks: [] })),
-        api.collections.getAll().catch(() => ({ collections: [] })),
-        api.tags.getAll().catch(() => ({ tags: [] }))
+        api.collections.getAll().catch(() => ({ collections: [] }))
       ])
 
       setBookmarks(bookmarksRes.bookmarks || [])
       setCollections(collectionsRes.collections || [])
-      setTags(tagsRes.tags || [])
     } catch (err) {
       console.error('Failed to load data:', err)
       setErrorMessage('Could not connect to server to load bookmarks.')
@@ -84,7 +82,7 @@ export default function AppLayout() {
     loadData()
   }, [loadData])
 
-  // Add Bookmark
+  // Bookmark CRUD handlers
   const handleAddBookmark = async (newBm) => {
     try {
       const res = await api.bookmarks.create(newBm)
@@ -93,6 +91,23 @@ export default function AppLayout() {
       }
     } catch (err) {
       console.error('Failed to create bookmark:', err)
+      throw err
+    }
+  }
+
+  // Update Bookmark
+  const handleUpdateBookmark = async (bookmarkId, updates) => {
+    try {
+      const res = await api.bookmarks.update(bookmarkId, updates)
+      if (res.bookmark) {
+        setBookmarks(prev => prev.map(bm => (bm.id === bookmarkId ? res.bookmark : bm)))
+        if (selectedBookmark?.id === bookmarkId) {
+          setSelectedBookmark(res.bookmark)
+        }
+      }
+      return res.bookmark
+    } catch (err) {
+      console.error('Failed to update bookmark:', err)
       throw err
     }
   }
@@ -266,8 +281,6 @@ export default function AppLayout() {
   else if (activeView === 'collection' && selectedCollectionId) {
     activeCollObj = collections.find(c => c.id === selectedCollectionId)
     currentTitle = activeCollObj ? activeCollObj.name : 'Collection'
-  } else if (activeView === 'tag' && selectedTag) {
-    currentTitle = `#${selectedTag}`
   }
 
   // Count calculations
@@ -287,13 +300,10 @@ export default function AppLayout() {
         setActiveView={setActiveView}
         selectedCollectionId={selectedCollectionId}
         setSelectedCollectionId={setSelectedCollectionId}
-        selectedTag={selectedTag}
-        setSelectedTag={setSelectedTag}
         collections={collections.map(c => ({
           ...c,
           bookmark_count: nonArchived.filter(b => b.collection_id === c.id).length
         }))}
-        tags={tags}
         bookmarkCounts={bookmarkCounts}
         onOpenAddModal={() => setIsAddModalOpen(true)}
         onOpenCollectionModal={() => {
@@ -310,14 +320,14 @@ export default function AppLayout() {
       <div className="flex-1 flex flex-col min-w-0 bg-[var(--rd-bg-main)] h-full overflow-hidden">
         {/* Error Alert */}
         {errorMessage && (
-          <div className="px-4 py-2 bg-rose-500/10 border-b border-rose-500/20 flex items-center justify-between text-xs text-rose-500">
+          <div className="bg-rose-500/10 border-b border-rose-500/20 px-4 py-2 text-rose-500 text-xs flex items-center justify-between">
             <div className="flex items-center gap-2">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
               <span>{errorMessage}</span>
             </div>
             <button
               onClick={() => setErrorMessage('')}
-              className="p-0.5 rounded text-rose-500 hover:text-rose-700 cursor-pointer"
+              className="p-1 hover:bg-rose-500/10 rounded cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -350,6 +360,7 @@ export default function AppLayout() {
               viewMode={viewMode}
               selectedBookmarkId={selectedBookmark?.id}
               onSelectBookmark={(bm) => setSelectedBookmark(bm)}
+              onEditBookmark={(bm) => setEditingBookmark(bm)}
               onToggleFavorite={handleToggleFavorite}
               onToggleArchive={handleToggleArchive}
               onOpenAddModal={() => setIsAddModalOpen(true)}
@@ -361,6 +372,7 @@ export default function AppLayout() {
             <BookmarkDetailPane
               bookmark={selectedBookmark}
               onClose={() => setSelectedBookmark(null)}
+              onEdit={(bm) => setEditingBookmark(bm)}
               onToggleFavorite={handleToggleFavorite}
               onToggleArchive={handleToggleArchive}
               onRefreshMetadata={handleRefreshBookmarkMetadata}
@@ -376,6 +388,14 @@ export default function AppLayout() {
         onClose={() => setIsAddModalOpen(false)}
         collections={collections}
         onAdd={handleAddBookmark}
+      />
+
+      <EditBookmarkModal
+        isOpen={Boolean(editingBookmark)}
+        onClose={() => setEditingBookmark(null)}
+        bookmark={editingBookmark}
+        collections={collections}
+        onUpdate={handleUpdateBookmark}
       />
 
       <CreateCollectionModal

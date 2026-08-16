@@ -25,7 +25,6 @@ import {
   Compass,
   Smile,
   Shield,
-  Tag,
   Feather
 } from 'lucide-react'
 

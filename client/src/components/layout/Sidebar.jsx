@@ -10,7 +10,6 @@ import {
   Settings,
   FolderPlus,
   MoreHorizontal,
-  Hash,
   Download,
   User,
   LogOut,
@@ -24,10 +23,7 @@ export default function Sidebar({
   setActiveView,
   selectedCollectionId,
   setSelectedCollectionId,
-  selectedTag,
-  setSelectedTag,
   collections = [],
-  tags = [],
   bookmarkCounts = { all: 0, unsorted: 0, favorites: 0, archive: 0 },
   onOpenAddModal,
   onOpenCollectionModal,
@@ -55,21 +51,12 @@ export default function Sidebar({
   const handleSelectNav = (viewId) => {
     setActiveView(viewId)
     setSelectedCollectionId(null)
-    setSelectedTag(null)
     setIsMobileOpen(false)
   }
 
   const handleSelectCollection = (collId) => {
     setActiveView('collection')
     setSelectedCollectionId(collId)
-    setSelectedTag(null)
-    setIsMobileOpen(false)
-  }
-
-  const handleSelectTag = (tagName) => {
-    setActiveView('tag')
-    setSelectedTag(tagName)
-    setSelectedCollectionId(null)
     setIsMobileOpen(false)
   }
 
@@ -376,36 +363,6 @@ export default function Sidebar({
               </div>
             </div>
 
-            {/* Tags / Filters Section */}
-            {tags.length > 0 && (
-              <div>
-                <div className="px-3 py-1.5 mb-1 text-[11px] font-bold uppercase tracking-wider text-[var(--rd-text-muted)]">
-                  <span>Tags</span>
-                </div>
-                <div className="space-y-0.5">
-                  {tags.map((t) => {
-                    const isSelected = activeView === 'tag' && selectedTag === t.name
-                    return (
-                      <button
-                        key={t.id || t.name}
-                        type="button"
-                        onClick={() => handleSelectTag(t.name)}
-                        className={`w-full flex items-center justify-between py-1.5 px-3 rounded-lg text-[13px] font-medium cursor-pointer transition-colors ${
-                          isSelected
-                            ? 'bg-[var(--rd-accent-active)] text-white shadow-xs font-semibold'
-                            : 'text-[var(--rd-text-primary)] hover:bg-[var(--rd-bg-hover)]'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <Hash className="w-3.5 h-3.5 opacity-60" />
-                          <span className="truncate">{t.name}</span>
-                        </div>
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-            )}
           </div>
         </div>
 

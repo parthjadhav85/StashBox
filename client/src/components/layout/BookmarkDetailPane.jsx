@@ -12,12 +12,14 @@ import {
   Archive,
   ArchiveRestore,
   Type,
-  RotateCw
+  RotateCw,
+  Edit3
 } from 'lucide-react'
 
 export default function BookmarkDetailPane({
   bookmark,
   onClose,
+  onEdit,
   onToggleFavorite,
   onToggleArchive,
   onRefreshMetadata,
@@ -85,6 +87,15 @@ export default function BookmarkDetailPane({
 
         {/* Right Actions */}
         <div className="flex items-center gap-1 text-[var(--rd-text-secondary)]">
+          <button
+            type="button"
+            onClick={() => onEdit?.(bookmark)}
+            className="p-1.5 rounded-lg hover:text-[var(--rd-text-primary)] hover:bg-[var(--rd-bg-hover)] transition-colors cursor-pointer"
+            title="Edit Bookmark Details"
+          >
+            <Edit3 className="w-4 h-4" />
+          </button>
+
           <button
             type="button"
             disabled={isRefreshing}

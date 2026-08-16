@@ -5,7 +5,8 @@ import {
   ExternalLink,
   Plus,
   Bookmark,
-  Folder
+  Folder,
+  Edit3
 } from 'lucide-react'
 
 export default function BookmarkListPane({
@@ -14,6 +15,7 @@ export default function BookmarkListPane({
   viewMode = 'masonry', // 'masonry' | 'list' | 'grid'
   selectedBookmarkId,
   onSelectBookmark,
+  onEditBookmark,
   onToggleFavorite,
   onToggleArchive,
   onOpenAddModal
@@ -140,6 +142,22 @@ export default function BookmarkListPane({
                     type="button"
                     onClick={(e) => {
                       e.stopPropagation()
+                      onEditBookmark?.(bm)
+                    }}
+                    className={`p-1.5 sm:p-2 rounded-lg transition-colors cursor-pointer ${
+                      isSelected
+                        ? 'text-white/70 hover:text-white hover:bg-white/20'
+                        : 'text-[var(--rd-text-muted)] hover:text-[var(--rd-text-primary)] hover:bg-[var(--rd-bg-card)] opacity-0 group-hover:opacity-100'
+                    }`}
+                    title="Edit Bookmark Details"
+                  >
+                    <Edit3 className="w-4 h-4" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation()
                       onToggleFavorite?.(bm.id)
                     }}
                     className={`p-1.5 sm:p-2 rounded-lg transition-colors cursor-pointer ${
@@ -222,11 +240,23 @@ export default function BookmarkListPane({
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation()
+                          onEditBookmark?.(bm)
+                        }}
+                        className="p-1.5 rounded-lg text-white hover:text-blue-400 cursor-pointer"
+                        title="Edit Bookmark Details"
+                      >
+                        <Edit3 className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation()
                           onToggleFavorite?.(bm.id)
                         }}
                         className={`p-1.5 rounded-lg text-white hover:text-rose-400 cursor-pointer ${
                           bm.is_favorite ? 'text-rose-500 fill-rose-500' : ''
                         }`}
+                        title={bm.is_favorite ? 'Remove Favorite' : 'Add to Favorites'}
                       >
                         <Heart className={`w-3.5 h-3.5 ${bm.is_favorite ? 'fill-current' : ''}`} />
                       </button>
@@ -236,6 +266,7 @@ export default function BookmarkListPane({
                         rel="noreferrer"
                         onClick={(e) => e.stopPropagation()}
                         className="p-1.5 rounded-lg text-white hover:text-blue-400"
+                        title="Open Link"
                       >
                         <ExternalLink className="w-3.5 h-3.5" />
                       </a>
@@ -253,18 +284,32 @@ export default function BookmarkListPane({
                         {bm.domain}
                       </span>
                     </div>
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        onToggleFavorite?.(bm.id)
-                      }}
-                      className={`p-1.5 rounded-lg hover:bg-black/10 cursor-pointer ${
-                        bm.is_favorite ? 'text-rose-500' : 'text-[var(--rd-text-muted)]'
-                      }`}
-                    >
-                      <Heart className={`w-3.5 h-3.5 ${bm.is_favorite ? 'fill-current' : ''}`} />
-                    </button>
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          onEditBookmark?.(bm)
+                        }}
+                        className="p-1.5 rounded-lg hover:bg-black/10 text-[var(--rd-text-muted)] hover:text-[var(--rd-text-primary)] cursor-pointer"
+                        title="Edit Bookmark Details"
+                      >
+                        <Edit3 className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          onToggleFavorite?.(bm.id)
+                        }}
+                        className={`p-1.5 rounded-lg hover:bg-black/10 cursor-pointer ${
+                          bm.is_favorite ? 'text-rose-500' : 'text-[var(--rd-text-muted)]'
+                        }`}
+                        title={bm.is_favorite ? 'Remove Favorite' : 'Add to Favorites'}
+                      >
+                        <Heart className={`w-3.5 h-3.5 ${bm.is_favorite ? 'fill-current' : ''}`} />
+                      </button>
+                    </div>
                   </div>
                 )}
 
