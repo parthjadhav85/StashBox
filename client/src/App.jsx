@@ -3,6 +3,7 @@ import { AuthProvider } from './context/AuthContext.jsx'
 import { ThemeProvider } from './context/ThemeContext.jsx'
 import { ProtectedRoute } from './components/ProtectedRoute.jsx'
 import HomePage from './pages/HomePage.jsx'
+import AboutPage from './pages/AboutPage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import SignupPage from './pages/SignupPage.jsx'
 import AppLayout from './components/layout/AppLayout.jsx'
@@ -13,8 +14,9 @@ export default function App() {
       <AuthProvider>
         <Router>
           <Routes>
-            {/* 1. Public Marketing Landing Page */}
+            {/* 1. Public Marketing & Informational Pages */}
             <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
 
             {/* 2. Authentication Pages */}
             <Route path="/login" element={<LoginPage />} />

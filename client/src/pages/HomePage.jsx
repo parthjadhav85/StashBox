@@ -1,68 +1,39 @@
 import { Link } from 'react-router-dom'
 import {
-  Bookmark,
-  Sun,
-  Moon,
   ArrowRight,
   Folder,
   ChevronDown,
-  ExternalLink
+  ExternalLink,
+  Mail
 } from 'lucide-react'
-import { useTheme } from '../context/ThemeContext.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
 
 export default function HomePage() {
-  const { resolvedTheme, setTheme } = useTheme()
   const { isAuthenticated } = useAuth()
 
-  const toggleTheme = () => {
-    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
-  }
-
   return (
-    <div className="min-h-screen w-full overflow-y-auto bg-[#fafafa] dark:bg-[#0E1117] text-[#171717] dark:text-[#ededed] font-sans antialiased transition-colors selection:bg-[#171717] selection:text-white dark:selection:bg-white dark:selection:text-[#171717] flex flex-col justify-between">
-      {/* 1. Navbar */}
-      <header className="w-full border-b border-black/[0.06] dark:border-white/[0.08] bg-white/80 dark:bg-[#0E1117]/80 backdrop-blur-md sticky top-0 z-40 transition-colors">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-6 h-6 rounded bg-[#171717] dark:bg-white text-white dark:text-[#171717] flex items-center justify-center transition-transform group-hover:scale-105">
-              <Bookmark className="w-3.5 h-3.5 fill-current stroke-current" />
-            </div>
-            <span className="text-sm font-semibold tracking-tight text-[#171717] dark:text-white">
+    <div className="min-h-screen w-full overflow-x-hidden bg-[#0A0D14] text-white font-sans antialiased selection:bg-white selection:text-black flex flex-col justify-between relative">
+      {/* 1. Transparent Navbar (Logo + Login + Get started) */}
+      <header className="w-full bg-transparent sticky top-0 z-40 transition-colors">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 h-20 flex items-center justify-between">
+          {/* Left: Official Brand Logo & Wordmark (Refined Proportionate Size) */}
+          <Link to="/" className="flex items-center gap-3 group">
+            <img
+              src="/favicon.svg"
+              alt="Stashbox logo"
+              className="w-8.5 h-8.5 rounded-lg object-contain transition-transform group-hover:scale-105"
+            />
+            <span className="text-[19px] font-bold tracking-tight text-white">
               Stashbox
             </span>
           </Link>
 
-          {/* Right Navigation */}
-          <div className="flex items-center gap-3 sm:gap-4">
-            <a
-              href="https://github.com"
-              target="_blank"
-              rel="noreferrer"
-              className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-[#171717] dark:hover:text-white transition-colors"
-            >
-              GitHub
-            </a>
-
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="p-1.5 rounded text-slate-500 dark:text-slate-400 hover:text-[#171717] dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
-              title={`Switch to ${resolvedTheme === 'dark' ? 'Light' : 'Dark'} mode`}
-              aria-label="Toggle theme"
-            >
-              {resolvedTheme === 'dark' ? (
-                <Sun className="w-4 h-4 text-amber-400" />
-              ) : (
-                <Moon className="w-4 h-4 text-slate-700" />
-              )}
-            </button>
-
+          {/* Right: Auth Links */}
+          <div className="flex items-center gap-4 sm:gap-6">
             {isAuthenticated ? (
               <Link
                 to="/app"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#171717] dark:bg-white text-white dark:text-[#171717] text-xs sm:text-sm font-medium transition-opacity hover:opacity-90 shadow-2xs"
+                className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white text-black text-sm font-medium transition-opacity hover:opacity-90 shadow-xs"
               >
                 <span>Open app</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -71,13 +42,13 @@ export default function HomePage() {
               <>
                 <Link
                   to="/login"
-                  className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-[#171717] dark:hover:text-white transition-colors"
+                  className="text-sm font-normal text-neutral-400 hover:text-white transition-colors"
                 >
                   Login
                 </Link>
                 <Link
                   to="/signup"
-                  className="px-3.5 py-1.5 rounded-full bg-[#171717] dark:bg-white text-white dark:text-[#171717] text-xs sm:text-sm font-medium transition-opacity hover:opacity-90 shadow-2xs"
+                  className="px-4 py-1.5 rounded-full bg-white text-black text-sm font-medium transition-opacity hover:opacity-90 shadow-xs"
                 >
                   Get started
                 </Link>
@@ -87,111 +58,105 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* 2. Main Hero Section: Left Copy + Right Zoomed-In Nested Visual */}
-      <main className="flex-1 w-full flex flex-col justify-center py-12 sm:py-20 px-4 sm:px-6">
-        <section className="max-w-5xl mx-auto w-full">
+      {/* 2. Middle Content: Hero Section */}
+      <main className="flex-1 w-full flex flex-col justify-center py-12 sm:py-20 px-6 sm:px-8">
+        <section className="max-w-6xl mx-auto w-full">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
             {/* Left Content Column */}
             <div className="lg:col-span-7 text-left space-y-4">
-              <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.06] text-[11px] font-mono tracking-wider uppercase text-slate-600 dark:text-slate-400">
-                <span>Bookmark manager</span>
-              </div>
-
-              <h1 className="text-3xl sm:text-4xl lg:text-[48px] font-semibold tracking-[-2px] text-[#171717] dark:text-white leading-[1.12]">
-                Save what matters.
-                <br />
-                Find it when you need it.
+              <h1 className="text-3xl sm:text-4xl lg:text-[48px] font-semibold tracking-[-2px] text-white leading-[1.12]">
+                A better way to manage your bookmarks.
               </h1>
 
-              <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 font-normal leading-relaxed max-w-md">
-                A simple, focused place to save and organize the websites worth keeping.
+              <p className="text-sm sm:text-base text-neutral-400 font-normal leading-relaxed max-w-md">
+                Save, organize, and keep all your links in one place.
               </p>
 
               {/* Primary Marketing CTA */}
               <div className="pt-2">
                 <Link
                   to={isAuthenticated ? '/app' : '/signup'}
-                  className="px-5 py-2.5 rounded-full bg-[#171717] dark:bg-white text-white dark:text-[#171717] font-medium text-xs sm:text-sm transition-opacity hover:opacity-90 inline-flex items-center gap-2 shadow-2xs"
+                  className="px-5 py-2.5 rounded-full bg-white text-black font-medium text-sm transition-opacity hover:opacity-90 inline-flex items-center gap-2 shadow-xs cursor-pointer"
                 >
-                  <span>{isAuthenticated ? 'Open app' : 'Get started'}</span>
+                  <span>{isAuthenticated ? 'Open app' : 'Try It now'}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>
 
-            {/* Right Content Column: Zoomed-in Slice of Nested Collections (~40% width) */}
+            {/* Right Content Column: Zoomed-in Slice of Nested Collections */}
             <div className="lg:col-span-5 w-full max-w-md mx-auto lg:max-w-none">
-              <div className="rounded-xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#161B22] p-4 shadow-xs select-none space-y-3.5">
+              <div className="rounded-2xl border border-white/[0.08] bg-[#111622] p-4.5 shadow-2xl select-none space-y-3.5">
                 {/* Parent Collection: Development */}
                 <div className="space-y-2">
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-800 dark:text-slate-200">
-                    <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
-                    <Folder className="w-3.5 h-3.5 text-blue-500 fill-blue-500/20" />
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-neutral-200">
+                    <ChevronDown className="w-3.5 h-3.5 text-neutral-500" />
+                    <Folder className="w-3.5 h-3.5 text-blue-400 fill-blue-400/20" />
                     <span>Development</span>
                   </div>
 
                   {/* Nested Collection: Frontend */}
-                  <div className="pl-4 space-y-2 border-l border-slate-200 dark:border-slate-800 ml-1.5">
-                    <div className="flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-slate-400">
-                      <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
-                      <Folder className="w-3.5 h-3.5 text-indigo-500 fill-indigo-500/20" />
+                  <div className="pl-4 space-y-2 border-l border-white/[0.08] ml-1.5">
+                    <div className="flex items-center gap-1.5 text-xs font-medium text-neutral-400">
+                      <ChevronDown className="w-3 h-3 text-neutral-500" />
+                      <Folder className="w-3 h-3 text-indigo-400 fill-indigo-400/20" />
                       <span>Frontend</span>
                     </div>
 
                     {/* Bookmarks under Frontend */}
                     <div className="pl-4 space-y-1.5">
-                      <div className="p-2 rounded-lg border border-black/[0.05] dark:border-white/[0.06] bg-slate-50/70 dark:bg-[#1C2128] flex items-center justify-between gap-2">
+                      <div className="p-2 rounded-xl border border-white/[0.06] bg-white/[0.03] flex items-center justify-between gap-2">
                         <div className="min-w-0">
-                          <div className="text-xs font-medium text-slate-900 dark:text-white truncate">Vercel</div>
-                          <div className="text-[10px] font-mono text-slate-400">vercel.com</div>
+                          <div className="text-xs font-medium text-white truncate">Vercel</div>
+                          <div className="text-[10px] font-mono text-neutral-400">vercel.com</div>
                         </div>
-                        <ExternalLink className="w-3 h-3 text-slate-300 dark:text-slate-600 flex-shrink-0" />
+                        <ExternalLink className="w-3 h-3 text-neutral-500 flex-shrink-0" />
                       </div>
 
-                      <div className="p-2 rounded-lg border border-black/[0.05] dark:border-white/[0.06] bg-slate-50/70 dark:bg-[#1C2128] flex items-center justify-between gap-2">
+                      <div className="p-2 rounded-xl border border-white/[0.06] bg-white/[0.03] flex items-center justify-between gap-2">
                         <div className="min-w-0">
-                          <div className="text-xs font-medium text-slate-900 dark:text-white truncate">React</div>
-                          <div className="text-[10px] font-mono text-slate-400">react.dev</div>
+                          <div className="text-xs font-medium text-white truncate">React</div>
+                          <div className="text-[10px] font-mono text-neutral-400">react.dev</div>
                         </div>
-                        <ExternalLink className="w-3 h-3 text-slate-300 dark:text-slate-600 flex-shrink-0" />
+                        <ExternalLink className="w-3 h-3 text-neutral-500 flex-shrink-0" />
                       </div>
                     </div>
 
                     {/* Nested Collection: Design */}
-                    <div className="flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 pt-1">
-                      <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
-                      <Folder className="w-3.5 h-3.5 text-rose-500 fill-rose-500/20" />
+                    <div className="flex items-center gap-1.5 text-xs font-medium text-neutral-400 pt-1">
+                      <ChevronDown className="w-3 h-3 text-neutral-500" />
+                      <Folder className="w-3 h-3 text-rose-400 fill-rose-400/20" />
                       <span>Design</span>
                     </div>
 
                     {/* Bookmarks under Design */}
                     <div className="pl-4 space-y-1.5">
-                      <div className="p-2 rounded-lg border border-black/[0.05] dark:border-white/[0.06] bg-slate-50/70 dark:bg-[#1C2128] flex items-center justify-between gap-2">
+                      <div className="p-2 rounded-xl border border-white/[0.06] bg-white/[0.03] flex items-center justify-between gap-2">
                         <div className="min-w-0">
-                          <div className="text-xs font-medium text-slate-900 dark:text-white truncate">Figma</div>
-                          <div className="text-[10px] font-mono text-slate-400">figma.com</div>
+                          <div className="text-xs font-medium text-white truncate">Figma</div>
+                          <div className="text-[10px] font-mono text-neutral-400">figma.com</div>
                         </div>
-                        <ExternalLink className="w-3 h-3 text-slate-300 dark:text-slate-600 flex-shrink-0" />
+                        <ExternalLink className="w-3 h-3 text-neutral-500 flex-shrink-0" />
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Parent Collection: Resources */}
-                <div className="space-y-2 pt-1 border-t border-black/[0.04] dark:border-white/[0.06]">
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-800 dark:text-slate-200">
-                    <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
-                    <Folder className="w-3.5 h-3.5 text-emerald-500 fill-emerald-500/20" />
+                <div className="space-y-2 pt-1 border-t border-white/[0.06]">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-neutral-200">
+                    <ChevronDown className="w-3.5 h-3.5 text-neutral-500" />
+                    <Folder className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400/20" />
                     <span>Resources</span>
                   </div>
 
                   <div className="pl-4 ml-1.5">
-                    <div className="p-2 rounded-lg border border-black/[0.05] dark:border-white/[0.06] bg-slate-50/70 dark:bg-[#1C2128] flex items-center justify-between gap-2">
+                    <div className="p-2 rounded-xl border border-white/[0.06] bg-white/[0.03] flex items-center justify-between gap-2">
                       <div className="min-w-0">
-                        <div className="text-xs font-medium text-slate-900 dark:text-white truncate">GitHub</div>
-                        <div className="text-[10px] font-mono text-slate-400">github.com</div>
+                        <div className="text-xs font-medium text-white truncate">GitHub</div>
+                        <div className="text-[10px] font-mono text-neutral-400">github.com</div>
                       </div>
-                      <ExternalLink className="w-3 h-3 text-slate-300 dark:text-slate-600 flex-shrink-0" />
+                      <ExternalLink className="w-3 h-3 text-neutral-500 flex-shrink-0" />
                     </div>
                   </div>
                 </div>
@@ -201,25 +166,41 @@ export default function HomePage() {
         </section>
       </main>
 
-      {/* 3. Minimal Footer */}
-      <footer className="border-t border-black/[0.06] dark:border-white/[0.08] bg-[#fafafa] dark:bg-[#0E1117] py-6 text-xs text-slate-500 dark:text-slate-400 transition-colors">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded bg-[#171717] dark:bg-white text-white dark:text-[#171717] flex items-center justify-center">
-              <Bookmark className="w-2.5 h-2.5 fill-current stroke-current" />
-            </div>
-            <span className="font-semibold text-[#171717] dark:text-white">Stashbox</span>
-            <span className="text-slate-400 dark:text-slate-500">© {new Date().getFullYear()} Stashbox</span>
+      {/* 3. Footer */}
+      <footer className="w-full border-t border-white/[0.06] py-8">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          {/* Left Side: Brand Title & Copyright */}
+          <div className="text-center sm:text-left">
+            <h2 className="text-sm font-bold text-white tracking-tight">Stashbox</h2>
+            <p className="text-xs text-neutral-500 mt-1">
+              © {new Date().getFullYear()} Stashbox
+            </p>
           </div>
 
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-[#171717] dark:hover:text-white transition-colors"
-          >
-            GitHub
-          </a>
+          {/* Right Side: Links */}
+          <div className="flex items-center gap-6 text-sm text-neutral-400">
+            <Link to="/about" className="text-xs hover:text-white transition-colors">
+              About
+            </Link>
+            <a
+              href="https://github.com"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-white transition-colors"
+              aria-label="GitHub repository"
+            >
+              <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+              </svg>
+            </a>
+            <a
+              href="mailto:contact@stashbox.dev"
+              className="hover:text-white transition-colors"
+              aria-label="Contact via email"
+            >
+              <Mail className="w-4 h-4" />
+            </a>
+          </div>
         </div>
       </footer>
     </div>
