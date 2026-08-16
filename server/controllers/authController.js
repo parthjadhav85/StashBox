@@ -104,18 +104,22 @@ export const updateProfile = async (req, res) => {
 
     const trimmedName = displayName.trim()
 
+    const db = req.supabase || supabase
+
     // Update in profiles table
-    const { data: profile, error } = await supabase
+    const { data: profile, error } = await db
       .from('profiles')
       .update({ display_name: trimmedName, updated_at: new Date().toISOString() })
       .eq('id', req.user.id)
       .select()
       .maybeSingle()
 
-    // Also update auth user metadata
-    await supabase.auth.updateUser({
-      data: { display_name: trimmedName }
-    })
+    // Also update auth user metadata if req.supabase is available
+    if (req.supabase) {
+      await req.supabase.auth.updateUser({
+        data: { display_name: trimmedName }
+      }).catch(() => {})
+    }
 
     res.json({
       message: 'Profile updated successfully',
