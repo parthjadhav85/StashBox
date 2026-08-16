@@ -1,5 +1,18 @@
-import { useState } from 'react'
-import { X, Globe, Plus, AlertCircle, Bookmark } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { X, Globe, AlertCircle, Bookmark, CheckCircle2 } from 'lucide-react'
+
+// Helper to validate whether a string is an actual HTTP/HTTPS URL
+const isValidHttpUrl = (string) => {
+  if (!string || typeof string !== 'string') return false
+  const trimmed = string.trim()
+  if (!trimmed.startsWith('http://') && !trimmed.startsWith('https://')) return false
+  try {
+    const parsed = new URL(trimmed)
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:'
+  } catch {
+    return false
+  }
+}
 
 export default function AddBookmarkModal({
   isOpen,
@@ -13,6 +26,41 @@ export default function AddBookmarkModal({
   const [collectionId, setCollectionId] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
+  const [isClipboardAutofilled, setIsClipboardAutofilled] = useState(false)
+
+  // Clipboard URL Autofill: check clipboard once when modal opens
+  useEffect(() => {
+    if (!isOpen) return
+
+    let isMounted = true
+
+    const checkClipboardForUrl = async () => {
+      // Only attempt if browser supports clipboard API
+      if (!navigator?.clipboard?.readText) return
+
+      try {
+        const text = await navigator.clipboard.readText()
+        if (isMounted && isValidHttpUrl(text)) {
+          // Never overwrite if user has already entered a URL
+          setUrl((currentUrl) => {
+            if (!currentUrl.trim()) {
+              setIsClipboardAutofilled(true)
+              return text.trim()
+            }
+            return currentUrl
+          })
+        }
+      } catch {
+        // Silently ignore clipboard permission errors or unavailable clipboard
+      }
+    }
+
+    checkClipboardForUrl()
+
+    return () => {
+      isMounted = false
+    }
+  }, [isOpen])
 
   if (!isOpen) return null
 
@@ -22,8 +70,14 @@ export default function AddBookmarkModal({
     setDescription('')
     setCollectionId('')
     setErrorMessage('')
+    setIsClipboardAutofilled(false)
     setIsSubmitting(false)
     onClose()
+  }
+
+  const handleUrlChange = (e) => {
+    setIsClipboardAutofilled(false)
+    setUrl(e.target.value)
   }
 
   const handleSubmit = async (e) => {
@@ -82,9 +136,17 @@ export default function AddBookmarkModal({
           )}
 
           <div>
-            <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--rd-text-secondary)] mb-1.5">
-              URL Link *
-            </label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--rd-text-secondary)]">
+                URL Link *
+              </label>
+              {isClipboardAutofilled && (
+                <span className="flex items-center gap-1 text-[10px] font-medium text-emerald-500 animate-in fade-in duration-200">
+                  <CheckCircle2 className="w-3 h-3" />
+                  <span>Detected from clipboard</span>
+                </span>
+              )}
+            </div>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--rd-text-muted)]">
                 <Globe className="w-4 h-4" />
@@ -94,7 +156,7 @@ export default function AddBookmarkModal({
                 required
                 autoFocus
                 value={url}
-                onChange={(e) => setUrl(e.target.value)}
+                onChange={handleUrlChange}
                 placeholder="https://example.com/article"
                 className="w-full pl-9 pr-3 py-2 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] rounded-xl text-xs sm:text-sm text-[var(--rd-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--rd-accent-blue)]"
               />
@@ -158,8 +220,7 @@ export default function AddBookmarkModal({
               disabled={isSubmitting}
               className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[var(--rd-accent-blue)] hover:bg-blue-600 text-white text-xs font-bold shadow-md shadow-blue-500/20 transition-all cursor-pointer disabled:opacity-50"
             >
-              <Plus className="w-4 h-4" />
-              <span>{isSubmitting ? 'Saving...' : 'Save Bookmark'}</span>
+              {isSubmitting ? 'Saving...' : '+ Save Bookmark'}
             </button>
           </div>
         </form>
