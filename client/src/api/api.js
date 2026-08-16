@@ -85,7 +85,8 @@ export const api = {
     update: (id, body) => request(`/bookmarks/${id}`, { method: 'PUT', body: JSON.stringify(body) }),
     delete: (id) => request(`/bookmarks/${id}`, { method: 'DELETE' }),
     toggleFavorite: (id, body = {}) => request(`/bookmarks/${id}/favorite`, { method: 'PATCH', body: JSON.stringify(body) }),
-    toggleArchive: (id, body = {}) => request(`/bookmarks/${id}/archive`, { method: 'PATCH', body: JSON.stringify(body) })
+    toggleArchive: (id, body = {}) => request(`/bookmarks/${id}/archive`, { method: 'PATCH', body: JSON.stringify(body) }),
+    refreshMetadata: (id) => request(`/bookmarks/${id}/refresh`, { method: 'POST' })
   },
   tags: {
     getAll: () => request('/tags'),

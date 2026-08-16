@@ -1,4 +1,5 @@
 import { supabase } from '../config/supabase.js'
+import { scrapePageMetadata } from '../utils/metadataScraper.js'
 
 const validateAndFormatUrl = (rawUrl) => {
   if (!rawUrl || typeof rawUrl !== 'string' || !rawUrl.trim()) {
@@ -66,8 +67,15 @@ export const createBookmark = async (req, res) => {
       }
     }
 
-    const finalDomain = domain ? domain.trim() : urlCheck.hostname
-    const finalTitle = title && title.trim() ? title.trim() : urlCheck.hostname
+    // Scrape page-specific metadata (JSON-LD, OG tags, images, favicons)
+    const scraped = await scrapePageMetadata(urlCheck.href)
+
+    // User-entered values take precedence over scraped values
+    const finalDomain = domain ? domain.trim() : (scraped.domain || urlCheck.hostname)
+    const finalTitle = (title && title.trim()) ? title.trim() : (scraped.title || finalDomain)
+    const finalDescription = (description && description.trim()) ? description.trim() : scraped.description
+    const finalPreviewImage = preview_image_url || scraped.preview_image_url || null
+    const finalFavicon = favicon_url || scraped.favicon_url || `https://www.google.com/s2/favicons?domain=${finalDomain}&sz=128`
 
     const { data, error } = await db
       .from('bookmarks')
@@ -76,10 +84,10 @@ export const createBookmark = async (req, res) => {
           user_id: req.user.id,
           url: urlCheck.href,
           title: finalTitle,
-          description: description ? description.trim() : null,
+          description: finalDescription,
           domain: finalDomain,
-          favicon_url: favicon_url || null,
-          preview_image_url: preview_image_url || null,
+          favicon_url: finalFavicon,
+          preview_image_url: finalPreviewImage,
           collection_id: collection_id || null,
           is_favorite: Boolean(is_favorite),
           is_archived: Boolean(is_archived)
@@ -102,6 +110,65 @@ export const createBookmark = async (req, res) => {
     res.status(500).json({
       message: 'Server error creating bookmark'
     })
+  }
+}
+
+export const refreshBookmarkMetadata = async (req, res) => {
+  try {
+    const db = req.supabase || supabase
+    const { id } = req.params
+
+    const { data: existing, error: findError } = await db
+      .from('bookmarks')
+      .select('*')
+      .eq('id', id)
+      .eq('user_id', req.user.id)
+      .maybeSingle()
+
+    if (findError || !existing) {
+      return res.status(404).json({
+        message: 'Bookmark not found'
+      })
+    }
+
+    // Scrape fresh metadata from the bookmark URL
+    const scraped = await scrapePageMetadata(existing.url)
+
+    // Update if scraped metadata is available
+    const updates = {
+      domain: scraped.domain || existing.domain,
+      favicon_url: scraped.favicon_url || existing.favicon_url,
+      preview_image_url: scraped.preview_image_url || existing.preview_image_url,
+      updated_at: new Date().toISOString()
+    }
+
+    if (scraped.description && (!existing.description || existing.description.trim() === '')) {
+      updates.description = scraped.description
+    }
+
+    // If current title is just the domain or URL, update with scraped title
+    if (!existing.title || existing.title.toLowerCase() === existing.domain?.toLowerCase() || existing.title.includes('http')) {
+      updates.title = scraped.title || existing.title
+    }
+
+    const { data: updated, error: updateError } = await db
+      .from('bookmarks')
+      .update(updates)
+      .eq('id', id)
+      .eq('user_id', req.user.id)
+      .select('*, collections(id, name, color, icon)')
+      .single()
+
+    if (updateError) {
+      return res.status(400).json({ message: updateError.message })
+    }
+
+    res.json({
+      message: 'Bookmark metadata refreshed',
+      bookmark: updated
+    })
+  } catch (error) {
+    res.status(500).json({ message: 'Server error refreshing bookmark metadata' })
   }
 }
 

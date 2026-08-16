@@ -1,148 +1,216 @@
+import { useState } from 'react'
 import {
   X,
   ExternalLink,
-  Star,
+  Heart,
   Trash2,
+  Share2,
+  Maximize2,
   Folder,
-  Tag,
   Globe,
   Clock,
-  Check,
-  Maximize2
+  Archive,
+  ArchiveRestore,
+  Type,
+  RotateCw
 } from 'lucide-react'
 
 export default function BookmarkDetailPane({
   bookmark,
   onClose,
   onToggleFavorite,
+  onToggleArchive,
+  onRefreshMetadata,
   onDelete
 }) {
+  const [activeTab, setActiveTab] = useState('article') // 'article' | 'website' | 'edit'
+  const [fontSize, setFontSize] = useState('md') // 'sm' | 'md' | 'lg'
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [isRefreshing, setIsRefreshing] = useState(false)
+
   if (!bookmark) return null
 
-  return (
-    <aside className="w-80 sm:w-96 border-l border-slate-800/80 bg-[#10141d] flex flex-col justify-between h-[calc(100vh-56px)] overflow-y-auto select-none">
-      {/* Top Header */}
-      <div>
-        <div className="h-12 border-b border-slate-800/80 px-4 flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <span className="text-xs font-bold text-slate-300">Bookmark Details</span>
-          </div>
+  const handleDelete = async () => {
+    if (isDeleting) return
+    setIsDeleting(true)
+    try {
+      await onDelete?.(bookmark.id)
+    } finally {
+      setIsDeleting(false)
+    }
+  }
 
-          <div className="flex items-center gap-1">
-            <a
-              href={bookmark.url}
-              target="_blank"
-              rel="noreferrer"
-              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors"
-              title="Open link in new tab"
-            >
-              <ExternalLink className="w-4 h-4" />
-            </a>
-            <button
-              type="button"
-              onClick={onClose}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors cursor-pointer"
-              title="Close panel"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
+  const handleRefresh = async () => {
+    if (isRefreshing) return
+    setIsRefreshing(true)
+    try {
+      await onRefreshMetadata?.(bookmark.id)
+    } finally {
+      setIsRefreshing(false)
+    }
+  }
+
+  const cycleFontSize = () => {
+    if (fontSize === 'sm') setFontSize('md')
+    else if (fontSize === 'md') setFontSize('lg')
+    else setFontSize('sm')
+  }
+
+  return (
+    <aside className="w-full lg:w-[480px] xl:w-[540px] border-l border-[var(--rd-border)] bg-[var(--rd-bg-card)] flex flex-col justify-between h-[calc(100vh-44px)] overflow-hidden select-text flex-shrink-0">
+      {/* Top Toolbar (Raindrop Screenshot 4 Replica) */}
+      <div className="h-11 px-4 border-b border-[var(--rd-border)] bg-[var(--rd-toolbar-bg)] flex items-center justify-between gap-2 flex-shrink-0 select-none">
+        {/* Left: View Tabs */}
+        <div className="flex items-center gap-1.5">
+          <button
+            type="button"
+            onClick={() => setActiveTab('article')}
+            className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
+              activeTab === 'article'
+                ? 'bg-[var(--rd-accent-active)] text-white shadow-xs'
+                : 'text-[var(--rd-text-secondary)] hover:text-[var(--rd-text-primary)] hover:bg-[var(--rd-bg-hover)]'
+            }`}
+          >
+            Article
+          </button>
+          <a
+            href={bookmark.url}
+            target="_blank"
+            rel="noreferrer"
+            className="px-2.5 py-1 rounded-full text-xs font-medium text-[var(--rd-text-secondary)] hover:text-[var(--rd-text-primary)] hover:bg-[var(--rd-bg-hover)] transition-colors"
+          >
+            {bookmark.domain || 'Website'}
+          </a>
         </div>
 
-        {/* Content Details Form */}
-        <div className="p-4 space-y-4">
-          {/* Favicon & Title Header */}
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center flex-shrink-0 text-slate-400">
-              {bookmark.favicon_url ? (
-                <img
-                  src={bookmark.favicon_url}
-                  alt=""
-                  className="w-5 h-5 rounded-xs"
-                  onError={(e) => { e.target.style.display = 'none' }}
-                />
-              ) : (
-                <Globe className="w-5 h-5" />
-              )}
-            </div>
+        {/* Right Actions */}
+        <div className="flex items-center gap-1 text-[var(--rd-text-secondary)]">
+          <button
+            type="button"
+            disabled={isRefreshing}
+            onClick={handleRefresh}
+            className={`p-1.5 rounded-lg hover:text-[var(--rd-text-primary)] hover:bg-[var(--rd-bg-hover)] transition-colors cursor-pointer ${
+              isRefreshing ? 'animate-spin text-[var(--rd-accent-blue)]' : ''
+            }`}
+            title="Refresh Page Metadata & Cover"
+          >
+            <RotateCw className="w-4 h-4" />
+          </button>
 
-            <div className="min-w-0 flex-1">
-              <h3 className="text-sm font-bold text-slate-100 leading-snug">
-                {bookmark.title || bookmark.url}
-              </h3>
-              <span className="text-[11px] font-mono text-slate-500 block truncate mt-0.5">
-                {bookmark.domain || 'website'}
-              </span>
-            </div>
-          </div>
+          <button
+            type="button"
+            onClick={() => onToggleFavorite?.(bookmark.id)}
+            className={`p-1.5 rounded-lg hover:bg-[var(--rd-bg-hover)] transition-colors cursor-pointer ${
+              bookmark.is_favorite ? 'text-rose-500 fill-rose-500' : 'hover:text-rose-500'
+            }`}
+            title={bookmark.is_favorite ? 'Favorited' : 'Favorite'}
+          >
+            <Heart className={`w-4 h-4 ${bookmark.is_favorite ? 'fill-current' : ''}`} />
+          </button>
 
-          {/* Description / Note */}
-          <div>
-            <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
-              Note / Description
-            </label>
-            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-xs text-slate-300 min-h-[70px]">
-              {bookmark.description || (
-                <span className="text-slate-600 italic">No notes added.</span>
-              )}
-            </div>
-          </div>
+          <button
+            type="button"
+            onClick={() => onToggleArchive?.(bookmark.id)}
+            className="p-1.5 rounded-lg hover:text-[var(--rd-text-primary)] hover:bg-[var(--rd-bg-hover)] transition-colors cursor-pointer"
+            title={bookmark.is_archived ? 'Restore' : 'Archive'}
+          >
+            {bookmark.is_archived ? <ArchiveRestore className="w-4 h-4 text-amber-500" /> : <Archive className="w-4 h-4" />}
+          </button>
 
-          {/* Collection */}
-          <div>
-            <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
-              Collection
-            </label>
-            <div className="flex items-center gap-2 p-2 rounded-xl bg-slate-900/80 border border-slate-800 text-xs text-slate-300">
-              <Folder className="w-4 h-4 text-indigo-400 flex-shrink-0" />
-              <span className="truncate">{bookmark.collections?.name || 'Unsorted'}</span>
-            </div>
-          </div>
+          <button
+            type="button"
+            disabled={isDeleting}
+            onClick={handleDelete}
+            className="p-1.5 rounded-lg hover:text-rose-500 hover:bg-rose-500/10 transition-colors cursor-pointer"
+            title="Delete Bookmark"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
 
-          {/* URL Field */}
-          <div>
-            <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
-              URL Link
-            </label>
-            <div className="flex items-center gap-2 p-2 rounded-xl bg-slate-900/80 border border-slate-800 text-xs text-slate-300 font-mono">
-              <Globe className="w-3.5 h-3.5 text-slate-500 flex-shrink-0" />
-              <span className="truncate text-[11px] select-all">{bookmark.url}</span>
-            </div>
-          </div>
+          <div className="w-px h-4 bg-[var(--rd-border)] mx-0.5" />
 
-          {/* Timestamp */}
-          {bookmark.created_at && (
-            <div className="flex items-center gap-2 text-[11px] text-slate-500 pt-2 border-t border-slate-800/60">
-              <Clock className="w-3.5 h-3.5" />
-              <span>Saved on {new Date(bookmark.created_at).toLocaleDateString()}</span>
-            </div>
-          )}
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-1.5 rounded-lg hover:text-[var(--rd-text-primary)] hover:bg-[var(--rd-bg-hover)] transition-colors cursor-pointer"
+            title="Close inspector"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
       </div>
 
-      {/* Bottom Action Footer */}
-      <div className="p-4 border-t border-slate-800/80 bg-slate-950/40 flex items-center justify-between gap-2">
-        <button
-          type="button"
-          onClick={() => onToggleFavorite?.(bookmark.id)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-colors cursor-pointer ${
-            bookmark.is_favorite
-              ? 'bg-yellow-500/10 border-yellow-500/30 text-yellow-300'
-              : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
-          }`}
-        >
-          <Star className={`w-3.5 h-3.5 ${bookmark.is_favorite ? 'fill-yellow-400 text-yellow-400' : ''}`} />
-          <span>{bookmark.is_favorite ? 'Favorited' : 'Favorite'}</span>
-        </button>
+      {/* Reader Body (Raindrop Screenshot 4 Reading Experience) */}
+      <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6">
+        {/* Domain & Date Eyebrow */}
+        <div className="flex items-center gap-2 text-xs text-[var(--rd-text-secondary)] font-medium">
+          {bookmark.favicon_url ? (
+            <img src={bookmark.favicon_url} alt="" className="w-4 h-4 rounded-xs" />
+          ) : (
+            <Globe className="w-4 h-4" />
+          )}
+          <span className="font-semibold text-[var(--rd-text-primary)]">{bookmark.domain}</span>
+          <span>•</span>
+          <span>{new Date(bookmark.created_at || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+        </div>
 
-        <button
-          type="button"
-          onClick={() => onDelete?.(bookmark.id)}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-300 text-xs font-semibold transition-colors cursor-pointer"
+        {/* Large Article Headline */}
+        <h1 className="text-xl sm:text-2xl font-black tracking-tight text-[var(--rd-text-primary)] leading-tight">
+          {bookmark.title || bookmark.url}
+        </h1>
+
+        {/* Hero Cover Image (Real Scraped Preview Image) */}
+        {bookmark.preview_image_url && (
+          <div className="rounded-xl overflow-hidden border border-[var(--rd-border)] bg-[var(--rd-bg-hover)]">
+            <img
+              src={bookmark.preview_image_url}
+              alt={bookmark.title || ''}
+              className="w-full h-auto object-cover max-h-96"
+            />
+          </div>
+        )}
+
+        {/* Article Body Content */}
+        <div className={`space-y-4 text-[var(--rd-text-primary)] leading-relaxed font-sans ${
+          fontSize === 'sm' ? 'text-xs' : fontSize === 'lg' ? 'text-base' : 'text-sm'
+        }`}>
+          {bookmark.description ? (
+            <p className="text-[var(--rd-text-secondary)] leading-relaxed">
+              {bookmark.description}
+            </p>
+          ) : null}
+
+          <p className="text-[var(--rd-text-secondary)] text-xs italic">
+            Saved to {bookmark.collections?.name || 'Unsorted'} on {new Date(bookmark.created_at || Date.now()).toLocaleDateString()}.
+          </p>
+        </div>
+      </div>
+
+      {/* Reader Bottom Bar (Raindrop Aa Font Adjuster + Source Link) */}
+      <div className="h-12 px-6 border-t border-[var(--rd-border)] bg-[var(--rd-toolbar-bg)] flex items-center justify-between text-xs text-[var(--rd-text-secondary)] flex-shrink-0 select-none">
+        {/* Source link */}
+        <a
+          href={bookmark.url}
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center gap-1.5 hover:text-[var(--rd-text-primary)] transition-colors truncate max-w-[280px]"
         >
-          <Trash2 className="w-3.5 h-3.5" />
-          <span>Delete</span>
-        </button>
+          <ExternalLink className="w-3.5 h-3.5 flex-shrink-0" />
+          <span className="truncate">{bookmark.url}</span>
+        </a>
+
+        {/* Typography adjuster */}
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={cycleFontSize}
+            className="flex items-center gap-1 px-2 py-1 rounded hover:bg-[var(--rd-bg-hover)] hover:text-[var(--rd-text-primary)] transition-colors font-bold cursor-pointer"
+            title="Adjust reading font size"
+          >
+            <Type className="w-3.5 h-3.5" />
+            <span className="text-[11px] uppercase tracking-wider">{fontSize}</span>
+          </button>
+        </div>
       </div>
     </aside>
   )

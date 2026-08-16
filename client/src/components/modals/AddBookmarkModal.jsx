@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { X, Globe, Plus, Bookmark } from 'lucide-react'
+import { X, Globe, Plus, AlertCircle, Bookmark } from 'lucide-react'
 
 export default function AddBookmarkModal({
   isOpen,
@@ -9,49 +9,84 @@ export default function AddBookmarkModal({
 }) {
   const [url, setUrl] = useState('')
   const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
   const [collectionId, setCollectionId] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
 
   if (!isOpen) return null
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    if (!url.trim()) return
-    onAdd?.({
-      url: url.trim(),
-      title: title.trim() || undefined,
-      collection_id: collectionId || null
-    })
+  const handleClose = () => {
     setUrl('')
     setTitle('')
+    setDescription('')
     setCollectionId('')
+    setErrorMessage('')
+    setIsSubmitting(false)
     onClose()
   }
 
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setErrorMessage('')
+
+    if (!url.trim()) {
+      setErrorMessage('Please enter a valid URL.')
+      return
+    }
+
+    try {
+      setIsSubmitting(true)
+      await onAdd?.({
+        url: url.trim(),
+        title: title.trim() || undefined,
+        description: description.trim() || undefined,
+        collection_id: collectionId || null
+      })
+      handleClose()
+    } catch (err) {
+      setErrorMessage(err.data?.message || err.message || 'Failed to save bookmark')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-in fade-in">
-      <div className="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden">
-        <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-indigo-600/20 text-indigo-400 flex items-center justify-center">
-              <Bookmark className="w-4 h-4" />
-            </div>
-            <h3 className="text-sm font-bold text-slate-100">Add New Bookmark</h3>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div
+        className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
+        onClick={handleClose}
+      />
+
+      <div className="relative w-full max-w-md bg-[var(--rd-bg-card)] border border-[var(--rd-border)] rounded-2xl shadow-2xl overflow-hidden z-10 animate-in zoom-in-95 duration-150 text-[var(--rd-text-primary)]">
+        {/* Header */}
+        <div className="px-5 py-3.5 border-b border-[var(--rd-border)] flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Bookmark className="w-4 h-4 text-[var(--rd-accent-blue)]" />
+            <h3 className="text-sm font-bold tracking-tight">Save Bookmark</h3>
           </div>
           <button
-            onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors cursor-pointer"
+            onClick={handleClose}
+            className="p-1 rounded-md text-[var(--rd-text-secondary)] hover:text-[var(--rd-text-primary)] hover:bg-[var(--rd-bg-hover)] transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-5 space-y-4">
+          {errorMessage && (
+            <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-start gap-2 text-rose-500 text-xs">
+              <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+              <span>{errorMessage}</span>
+            </div>
+          )}
+
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--rd-text-secondary)] mb-1.5">
               URL Link *
             </label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--rd-text-muted)]">
                 <Globe className="w-4 h-4" />
               </div>
               <input
@@ -61,32 +96,45 @@ export default function AddBookmarkModal({
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="https://example.com/article"
-                className="w-full pl-9 pr-3 py-2 bg-slate-800/80 border border-slate-700 rounded-xl text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full pl-9 pr-3 py-2 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] rounded-xl text-xs sm:text-sm text-[var(--rd-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--rd-accent-blue)]"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--rd-text-secondary)] mb-1.5">
               Title (Optional)
             </label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. React 19 Documentation"
-              className="w-full px-3 py-2 bg-slate-800/80 border border-slate-700 rounded-xl text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="e.g. Design Inspiration Gallery"
+              className="w-full px-3 py-2 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] rounded-xl text-xs sm:text-sm text-[var(--rd-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--rd-accent-blue)]"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
-              Collection (Optional)
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--rd-text-secondary)] mb-1.5">
+              Note / Description (Optional)
+            </label>
+            <textarea
+              rows={2}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Add key notes..."
+              className="w-full p-2.5 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] rounded-xl text-xs text-[var(--rd-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--rd-accent-blue)] resize-none"
+            />
+          </div>
+
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--rd-text-secondary)] mb-1.5">
+              Collection
             </label>
             <select
               value={collectionId}
               onChange={(e) => setCollectionId(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-800/80 border border-slate-700 rounded-xl text-xs sm:text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] rounded-xl text-xs sm:text-sm text-[var(--rd-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--rd-accent-blue)] cursor-pointer"
             >
               <option value="">Unsorted</option>
               {collections.map((c) => (
@@ -97,20 +145,21 @@ export default function AddBookmarkModal({
             </select>
           </div>
 
-          <div className="pt-3 flex items-center justify-end gap-2">
+          <div className="pt-3 flex items-center justify-end gap-2 border-t border-[var(--rd-border)]">
             <button
               type="button"
-              onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors cursor-pointer"
+              onClick={handleClose}
+              className="px-4 py-2 rounded-xl text-xs font-medium text-[var(--rd-text-secondary)] hover:text-[var(--rd-text-primary)] hover:bg-[var(--rd-bg-hover)] transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md shadow-indigo-600/25 transition-all cursor-pointer"
+              disabled={isSubmitting}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[var(--rd-accent-blue)] hover:bg-blue-600 text-white text-xs font-bold shadow-md shadow-blue-500/20 transition-all cursor-pointer disabled:opacity-50"
             >
               <Plus className="w-4 h-4" />
-              <span>Save Bookmark</span>
+              <span>{isSubmitting ? 'Saving...' : 'Save Bookmark'}</span>
             </button>
           </div>
         </form>

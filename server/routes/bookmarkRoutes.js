@@ -6,7 +6,8 @@ import {
   updateBookmark,
   deleteBookmark,
   toggleFavorite,
-  toggleArchive
+  toggleArchive,
+  refreshBookmarkMetadata
 } from '../controllers/bookmarkController.js'
 import { authenticateUser } from '../middleware/authMiddleware.js'
 
@@ -21,5 +22,6 @@ router.put('/:id', updateBookmark)
 router.delete('/:id', deleteBookmark)
 router.patch('/:id/favorite', toggleFavorite)
 router.patch('/:id/archive', toggleArchive)
+router.post('/:id/refresh', refreshBookmarkMetadata)
 
 export default router

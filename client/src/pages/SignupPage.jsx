@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
-import { Bookmark, Mail, Lock, User, Eye, EyeOff, ArrowRight, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react'
+import { Bookmark, Mail, Lock, User, Eye, EyeOff, AlertCircle, CheckCircle2 } from 'lucide-react'
 
 export default function SignupPage() {
   const [displayName, setDisplayName] = useState('')
@@ -31,7 +31,7 @@ export default function SignupPage() {
     }
 
     if (!email.trim() || !password) {
-      setErrorMessage('Please provide both email and password.')
+      setErrorMessage('Email and password are required.')
       return
     }
 
@@ -52,7 +52,7 @@ export default function SignupPage() {
       if (res.session?.access_token) {
         navigate('/', { replace: true })
       } else {
-        setSuccessMessage('Account created successfully! You can now log in with your credentials.')
+        setSuccessMessage('Account created successfully. You can now log in.')
       }
     } catch (err) {
       setErrorMessage(err.data?.message || err.message || 'Registration failed. Please try again.')
@@ -62,113 +62,105 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Subtle Background Glow Elements */}
-      <div className="absolute -top-40 -right-40 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-violet-600/15 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
-        <div className="flex justify-center mb-4">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center shadow-xl shadow-indigo-500/25 border border-indigo-400/20">
-            <Bookmark className="w-6 h-6 text-white" />
+    <div className="min-h-screen bg-[var(--rd-bg-main)] text-[var(--rd-text-primary)] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 select-none transition-colors">
+      <div className="sm:mx-auto sm:w-full sm:max-w-[380px]">
+        {/* Brand Mark */}
+        <div className="flex justify-center mb-6">
+          <div className="w-12 h-12 rounded-2xl bg-[var(--rd-accent-blue)] text-white flex items-center justify-center shadow-lg shadow-blue-500/20">
+            <Bookmark className="w-6 h-6 fill-current stroke-current" />
           </div>
         </div>
-        <h1 className="text-center text-3xl font-extrabold tracking-tight text-white">
-          Create your account
+
+        <h1 className="text-center text-xl font-bold tracking-tight">
+          Create Stashbox Account
         </h1>
-        <p className="mt-2 text-center text-sm text-slate-400">
-          Join Stashbox to organize, tag, and search all your bookmarks
+        <p className="mt-1 text-center text-xs text-[var(--rd-text-secondary)]">
+          Join Stashbox to organize and collect your inspiration.
         </p>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10 px-4 sm:px-0">
-        <div className="bg-slate-900/80 backdrop-blur-xl py-8 px-6 shadow-2xl shadow-black/50 sm:rounded-2xl sm:px-10 border border-slate-800/80">
+      <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-[380px]">
+        <div className="bg-[var(--rd-bg-card)] border border-[var(--rd-border)] rounded-2xl p-6 shadow-xl">
           {errorMessage && (
-            <div className="mb-6 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-start gap-3 text-rose-300 text-sm animate-in fade-in">
-              <AlertCircle className="w-5 h-5 flex-shrink-0 text-rose-400 mt-0.5" />
+            <div className="mb-4 p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-start gap-2.5 text-rose-500 text-xs">
+              <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
               <span>{errorMessage}</span>
             </div>
           )}
 
           {successMessage && (
-            <div className="mb-6 p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-start gap-3 text-emerald-300 text-sm animate-in fade-in">
-              <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-emerald-400 mt-0.5" />
+            <div className="mb-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-start gap-2.5 text-emerald-500 text-xs">
+              <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5" />
               <div>
                 <p>{successMessage}</p>
-                <Link to="/login" className="font-semibold underline mt-1 inline-block text-emerald-200 hover:text-white">
-                  Proceed to Login →
+                <Link to="/login" className="font-bold underline mt-1 inline-block">
+                  Sign in here →
                 </Link>
               </div>
             </div>
           )}
 
-          <form className="space-y-4" onSubmit={handleSubmit}>
+          <form className="space-y-3.5" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="displayName" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
-                Display name
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--rd-text-secondary)] mb-1.5">
+                Display Name
               </label>
-              <div className="relative rounded-xl shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--rd-text-muted)]">
                   <User className="w-4 h-4" />
                 </div>
                 <input
-                  id="displayName"
-                  name="displayName"
                   type="text"
                   required
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
                   placeholder="Alex Doe"
-                  className="block w-full pl-10 pr-3.5 py-2.5 bg-slate-800/60 border border-slate-700/80 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                  className="w-full pl-9 pr-3 py-2 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] rounded-xl text-xs sm:text-sm text-[var(--rd-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--rd-accent-blue)]"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="signup-email" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
-                Email address
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--rd-text-secondary)] mb-1.5">
+                Email
               </label>
-              <div className="relative rounded-xl shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--rd-text-muted)]">
                   <Mail className="w-4 h-4" />
                 </div>
                 <input
-                  id="signup-email"
-                  name="email"
                   type="email"
-                  autoComplete="email"
                   required
+                  autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  className="block w-full pl-10 pr-3.5 py-2.5 bg-slate-800/60 border border-slate-700/80 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                  placeholder="name@company.com"
+                  className="w-full pl-9 pr-3 py-2 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] rounded-xl text-xs sm:text-sm text-[var(--rd-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--rd-accent-blue)]"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="signup-password" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--rd-text-secondary)] mb-1.5">
                 Password
               </label>
-              <div className="relative rounded-xl shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--rd-text-muted)]">
                   <Lock className="w-4 h-4" />
                 </div>
                 <input
-                  id="signup-password"
-                  name="password"
                   type={showPassword ? 'text' : 'password'}
-                  autoComplete="new-password"
                   required
+                  autoComplete="new-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Minimum 6 characters"
-                  className="block w-full pl-10 pr-10 py-2.5 bg-slate-800/60 border border-slate-700/80 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                  placeholder="At least 6 characters"
+                  className="w-full pl-9 pr-9 py-2 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] rounded-xl text-xs sm:text-sm text-[var(--rd-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--rd-accent-blue)]"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-200 transition-colors"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-[var(--rd-text-muted)] hover:text-[var(--rd-text-primary)] cursor-pointer"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -176,23 +168,21 @@ export default function SignupPage() {
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--rd-text-secondary)] mb-1.5">
                 Confirm Password
               </label>
-              <div className="relative rounded-xl shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--rd-text-muted)]">
                   <Lock className="w-4 h-4" />
                 </div>
                 <input
-                  id="confirmPassword"
-                  name="confirmPassword"
                   type={showPassword ? 'text' : 'password'}
-                  autoComplete="new-password"
                   required
+                  autoComplete="new-password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Re-enter password"
-                  className="block w-full pl-10 pr-3.5 py-2.5 bg-slate-800/60 border border-slate-700/80 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                  className="w-full pl-9 pr-3 py-2 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] rounded-xl text-xs sm:text-sm text-[var(--rd-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--rd-accent-blue)]"
                 />
               </div>
             </div>
@@ -201,28 +191,21 @@ export default function SignupPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full flex justify-center items-center gap-2 py-2.5 px-4 border border-transparent rounded-xl shadow-lg shadow-indigo-600/25 text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer"
+                className="w-full py-2.5 rounded-xl bg-[var(--rd-accent-blue)] hover:bg-blue-600 text-white text-xs font-bold shadow-md shadow-blue-500/20 transition-all cursor-pointer disabled:opacity-50"
               >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Creating account...</span>
-                  </>
-                ) : (
-                  <>
-                    <span>Create account</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
+                {isSubmitting ? 'Creating account...' : 'Create Account'}
               </button>
             </div>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-slate-800 text-center">
-            <p className="text-sm text-slate-400">
+          <div className="mt-5 pt-4 border-t border-[var(--rd-border)] text-center">
+            <p className="text-xs text-[var(--rd-text-secondary)]">
               Already have an account?{' '}
-              <Link to="/login" className="font-semibold text-indigo-400 hover:text-indigo-300 transition-colors">
-                Sign in instead
+              <Link
+                to="/login"
+                className="text-[var(--rd-accent-blue)] hover:underline font-semibold"
+              >
+                Log in
               </Link>
             </p>
           </div>
