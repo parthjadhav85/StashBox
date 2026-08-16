@@ -1,4 +1,4 @@
-import { supabase } from '../config/supabase.js'
+import { supabase, getSupabaseClient } from '../config/supabase.js'
 
 export const authenticateUser = async (req, res, next) => {
   try {
@@ -12,6 +12,12 @@ export const authenticateUser = async (req, res, next) => {
 
     const token = authHeader.split(' ')[1]
 
+    if (!token) {
+      return res.status(401).json({
+        message: 'Authentication token missing'
+      })
+    }
+
     const {
       data: { user },
       error
@@ -24,6 +30,8 @@ export const authenticateUser = async (req, res, next) => {
     }
 
     req.user = user
+    req.token = token
+    req.supabase = getSupabaseClient(token)
 
     next()
   } catch (error) {
@@ -31,4 +39,4 @@ export const authenticateUser = async (req, res, next) => {
       message: 'Authentication error'
     })
   }
-}
+}

@@ -70,3 +70,72 @@ export const login = async (req, res) => {
     })
   }
 }
+
+export const getMe = async (req, res) => {
+  try {
+    const user = req.user
+
+    const { data: profile, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .maybeSingle()
+
+    res.json({
+      user,
+      profile: profile || null
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: 'Server error'
+    })
+  }
+}
+
+export const updateProfile = async (req, res) => {
+  try {
+    const { displayName } = req.body
+
+    if (!displayName || !displayName.trim()) {
+      return res.status(400).json({
+        message: 'Display name is required'
+      })
+    }
+
+    const trimmedName = displayName.trim()
+
+    // Update in profiles table
+    const { data: profile, error } = await supabase
+      .from('profiles')
+      .update({ display_name: trimmedName, updated_at: new Date().toISOString() })
+      .eq('id', req.user.id)
+      .select()
+      .maybeSingle()
+
+    // Also update auth user metadata
+    await supabase.auth.updateUser({
+      data: { display_name: trimmedName }
+    })
+
+    res.json({
+      message: 'Profile updated successfully',
+      profile: profile || { id: req.user.id, display_name: trimmedName }
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: 'Server error'
+    })
+  }
+}
+
+export const logout = async (req, res) => {
+  try {
+    res.json({
+      message: 'Logged out successfully'
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: 'Server error'
+    })
+  }
+}
