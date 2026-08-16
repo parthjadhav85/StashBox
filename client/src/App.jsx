@@ -4,7 +4,7 @@ import { ThemeProvider } from './context/ThemeContext.jsx'
 import { ProtectedRoute } from './components/ProtectedRoute.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import SignupPage from './pages/SignupPage.jsx'
-import DashboardPlaceholder from './pages/DashboardPlaceholder.jsx'
+import AppLayout from './components/layout/AppLayout.jsx'
 
 export default function App() {
   return (
@@ -18,7 +18,7 @@ export default function App() {
               path="/"
               element={
                 <ProtectedRoute>
-                  <DashboardPlaceholder />
+                  <AppLayout />
                 </ProtectedRoute>
               }
             />
