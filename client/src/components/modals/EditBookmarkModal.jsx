@@ -64,9 +64,9 @@ export default function EditBookmarkModal({
       {/* Modal Dialog */}
       <div className="relative w-full max-w-lg bg-[var(--rd-bg-card)] border border-[var(--rd-border)] rounded-2xl shadow-2xl overflow-hidden z-10 animate-in zoom-in-95 duration-150 text-[var(--rd-text-primary)]">
         {/* Modal Header */}
-        <div className="px-5 py-4 border-b border-[var(--rd-border)] flex items-center justify-between">
+        <div className="px-5 py-3.5 border-b border-[var(--rd-border)] flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Edit3 className="w-4 h-4 text-[var(--rd-accent-blue)]" />
+            <Edit3 className="w-4 h-4 text-[var(--rd-accent-gold)]" />
             <h3 className="text-sm font-bold tracking-tight">Edit Bookmark</h3>
           </div>
           <button
@@ -98,7 +98,7 @@ export default function EditBookmarkModal({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Bookmark title"
-              className="w-full px-3.5 py-2.5 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] focus:border-[var(--rd-accent-blue)] rounded-xl text-xs sm:text-sm text-[var(--rd-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--rd-accent-blue)]/20 transition-all"
+              className="w-full px-3 py-2 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] focus:border-[var(--rd-accent-gold)] rounded-xl text-xs sm:text-sm text-[var(--rd-text-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--rd-accent-gold)]/30 transition-all"
             />
           </div>
 
@@ -112,7 +112,7 @@ export default function EditBookmarkModal({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Add key notes, comments, or thoughts..."
-              className="w-full p-3 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] focus:border-[var(--rd-accent-blue)] rounded-xl text-xs text-[var(--rd-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--rd-accent-blue)]/20 transition-all resize-none"
+              className="w-full p-2.5 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] focus:border-[var(--rd-accent-gold)] rounded-xl text-xs text-[var(--rd-text-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--rd-accent-gold)]/30 transition-all resize-none"
             />
           </div>
 
@@ -125,7 +125,7 @@ export default function EditBookmarkModal({
               <select
                 value={collectionId}
                 onChange={(e) => setCollectionId(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] focus:border-[var(--rd-accent-blue)] rounded-xl text-xs sm:text-sm text-[var(--rd-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--rd-accent-blue)]/20 transition-all cursor-pointer"
+                className="w-full px-3 py-2 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] focus:border-[var(--rd-accent-gold)] rounded-xl text-xs sm:text-sm text-[var(--rd-text-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--rd-accent-gold)]/30 transition-all cursor-pointer"
               >
                 <option value="">Unsorted</option>
                 {collections.map((c) => (
@@ -150,7 +150,7 @@ export default function EditBookmarkModal({
                 href={bookmark.url}
                 target="_blank"
                 rel="noreferrer"
-                className="p-1 text-[var(--rd-text-muted)] hover:text-[var(--rd-accent-blue)] transition-colors flex-shrink-0"
+                className="p-1 text-[var(--rd-text-muted)] hover:text-[var(--rd-accent-gold)] transition-colors flex-shrink-0"
                 title="Open Link"
               >
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -163,14 +163,14 @@ export default function EditBookmarkModal({
             <button
               type="button"
               onClick={handleClose}
-              className="px-4 py-2 rounded-xl text-xs font-medium text-[var(--rd-text-secondary)] hover:text-[var(--rd-text-primary)] hover:bg-[var(--rd-bg-hover)] transition-colors cursor-pointer"
+              className="px-3.5 py-2 rounded-xl text-xs font-medium text-[var(--rd-text-secondary)] hover:text-[var(--rd-text-primary)] hover:bg-[var(--rd-bg-hover)] transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-4 py-2 rounded-xl bg-[var(--rd-accent-blue)] hover:bg-blue-600 text-white text-xs font-bold shadow-md shadow-blue-500/20 transition-all cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[var(--rd-accent-gold)] hover:bg-[var(--rd-accent-gold-hover)] active:scale-[0.98] text-[var(--rd-accent-gold-text)] text-xs font-semibold shadow-xs hover:shadow-sm transition-all cursor-pointer disabled:opacity-50"
             >
               {isSubmitting ? 'Saving...' : 'Save Changes'}
             </button>

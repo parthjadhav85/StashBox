@@ -35,13 +35,11 @@ export default function AddBookmarkModal({
     let isMounted = true
 
     const checkClipboardForUrl = async () => {
-      // Only attempt if browser supports clipboard API
       if (!navigator?.clipboard?.readText) return
 
       try {
         const text = await navigator.clipboard.readText()
         if (isMounted && isValidHttpUrl(text)) {
-          // Never overwrite if user has already entered a URL
           setUrl((currentUrl) => {
             if (!currentUrl.trim()) {
               setIsClipboardAutofilled(true)
@@ -51,7 +49,7 @@ export default function AddBookmarkModal({
           })
         }
       } catch {
-        // Silently ignore clipboard permission errors or unavailable clipboard
+        // Silently ignore clipboard permission errors
       }
     }
 
@@ -116,10 +114,11 @@ export default function AddBookmarkModal({
         {/* Header */}
         <div className="px-5 py-3.5 border-b border-[var(--rd-border)] flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Bookmark className="w-4 h-4 text-[var(--rd-accent-blue)]" />
+            <Bookmark className="w-4 h-4 text-[var(--rd-accent-gold)]" />
             <h3 className="text-sm font-bold tracking-tight">Save Bookmark</h3>
           </div>
           <button
+            type="button"
             onClick={handleClose}
             className="p-1 rounded-md text-[var(--rd-text-secondary)] hover:text-[var(--rd-text-primary)] hover:bg-[var(--rd-bg-hover)] transition-colors cursor-pointer"
           >
@@ -158,7 +157,7 @@ export default function AddBookmarkModal({
                 value={url}
                 onChange={handleUrlChange}
                 placeholder="https://example.com/article"
-                className="w-full pl-9 pr-3 py-2 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] rounded-xl text-xs sm:text-sm text-[var(--rd-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--rd-accent-blue)]"
+                className="w-full pl-9 pr-3 py-2 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] rounded-xl text-xs sm:text-sm text-[var(--rd-text-primary)] focus:border-[var(--rd-accent-gold)] focus:outline-none focus:ring-1 focus:ring-[var(--rd-accent-gold)]/30"
               />
             </div>
           </div>
@@ -172,7 +171,7 @@ export default function AddBookmarkModal({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Design Inspiration Gallery"
-              className="w-full px-3 py-2 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] rounded-xl text-xs sm:text-sm text-[var(--rd-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--rd-accent-blue)]"
+              className="w-full px-3 py-2 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] rounded-xl text-xs sm:text-sm text-[var(--rd-text-primary)] focus:border-[var(--rd-accent-gold)] focus:outline-none focus:ring-1 focus:ring-[var(--rd-accent-gold)]/30"
             />
           </div>
 
@@ -185,7 +184,7 @@ export default function AddBookmarkModal({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Add key notes..."
-              className="w-full p-2.5 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] rounded-xl text-xs text-[var(--rd-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--rd-accent-blue)] resize-none"
+              className="w-full p-2.5 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] rounded-xl text-xs text-[var(--rd-text-primary)] focus:border-[var(--rd-accent-gold)] focus:outline-none focus:ring-1 focus:ring-[var(--rd-accent-gold)]/30 resize-none"
             />
           </div>
 
@@ -196,7 +195,7 @@ export default function AddBookmarkModal({
             <select
               value={collectionId}
               onChange={(e) => setCollectionId(e.target.value)}
-              className="w-full px-3 py-2 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] rounded-xl text-xs sm:text-sm text-[var(--rd-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--rd-accent-blue)] cursor-pointer"
+              className="w-full px-3 py-2 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] rounded-xl text-xs sm:text-sm text-[var(--rd-text-primary)] focus:border-[var(--rd-accent-gold)] focus:outline-none focus:ring-1 focus:ring-[var(--rd-accent-gold)]/30 cursor-pointer"
             >
               <option value="">Unsorted</option>
               {collections.map((c) => (
@@ -211,14 +210,14 @@ export default function AddBookmarkModal({
             <button
               type="button"
               onClick={handleClose}
-              className="px-4 py-2 rounded-xl text-xs font-medium text-[var(--rd-text-secondary)] hover:text-[var(--rd-text-primary)] hover:bg-[var(--rd-bg-hover)] transition-colors cursor-pointer"
+              className="px-3.5 py-2 rounded-xl text-xs font-medium text-[var(--rd-text-secondary)] hover:text-[var(--rd-text-primary)] hover:bg-[var(--rd-bg-hover)] transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[var(--rd-accent-blue)] hover:bg-blue-600 text-white text-xs font-bold shadow-md shadow-blue-500/20 transition-all cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[var(--rd-accent-gold)] hover:bg-[var(--rd-accent-gold-hover)] active:scale-[0.98] text-[var(--rd-accent-gold-text)] text-xs font-semibold shadow-xs hover:shadow-sm transition-all cursor-pointer disabled:opacity-50"
             >
               {isSubmitting ? 'Saving...' : '+ Save Bookmark'}
             </button>

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { X, Sun, Moon, Monitor, User, Shield, LogOut } from 'lucide-react'
+import { X, Sun, Moon, Monitor, User, LogOut } from 'lucide-react'
 import { useTheme } from '../../context/ThemeContext.jsx'
 import { useAuth } from '../../context/AuthContext.jsx'
 
@@ -20,11 +20,12 @@ export default function SettingsModal({ isOpen, onClose }) {
         onClick={onClose}
       />
 
-      <div className="relative w-full max-w-lg bg-[var(--rd-bg-card)] border border-[var(--rd-border)] rounded-xl shadow-2xl overflow-hidden z-10 animate-in zoom-in-95 duration-150 text-[var(--rd-text-primary)]">
+      <div className="relative w-full max-w-lg bg-[var(--rd-bg-card)] border border-[var(--rd-border)] rounded-2xl shadow-2xl overflow-hidden z-10 animate-in zoom-in-95 duration-150 text-[var(--rd-text-primary)]">
         {/* Header */}
         <div className="px-5 py-3.5 border-b border-[var(--rd-border)] flex items-center justify-between">
           <h3 className="text-sm font-bold tracking-tight">Settings</h3>
           <button
+            type="button"
             onClick={onClose}
             className="p-1 rounded-md text-[var(--rd-text-secondary)] hover:text-[var(--rd-text-primary)] hover:bg-[var(--rd-bg-hover)] transition-colors cursor-pointer"
           >
@@ -37,6 +38,7 @@ export default function SettingsModal({ isOpen, onClose }) {
           {/* Left Tabs */}
           <div className="w-full sm:w-40 border-b sm:border-b-0 sm:border-r border-[var(--rd-border)] p-2 space-y-1 bg-[var(--rd-bg-sidebar)]">
             <button
+              type="button"
               onClick={() => setActiveTab('appearance')}
               className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-left transition-colors cursor-pointer ${
                 activeTab === 'appearance'
@@ -49,6 +51,7 @@ export default function SettingsModal({ isOpen, onClose }) {
             </button>
 
             <button
+              type="button"
               onClick={() => setActiveTab('account')}
               className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-left transition-colors cursor-pointer ${
                 activeTab === 'account'
@@ -81,7 +84,7 @@ export default function SettingsModal({ isOpen, onClose }) {
                     onClick={() => setTheme('light')}
                     className={`p-3 rounded-xl border flex flex-col items-center gap-2 transition-all cursor-pointer ${
                       theme === 'light'
-                        ? 'border-[var(--rd-accent-blue)] ring-2 ring-[var(--rd-accent-blue)]/20 bg-blue-500/5'
+                        ? 'border-[var(--rd-accent-gold)] ring-2 ring-[var(--rd-accent-gold)]/20 bg-[var(--rd-accent-gold)]/5'
                         : 'border-[var(--rd-border)] hover:border-[var(--rd-text-secondary)] bg-[var(--rd-bg-main)]'
                     }`}
                   >
@@ -97,7 +100,7 @@ export default function SettingsModal({ isOpen, onClose }) {
                     onClick={() => setTheme('dark')}
                     className={`p-3 rounded-xl border flex flex-col items-center gap-2 transition-all cursor-pointer ${
                       theme === 'dark'
-                        ? 'border-[var(--rd-accent-blue)] ring-2 ring-[var(--rd-accent-blue)]/20 bg-blue-500/5'
+                        ? 'border-[var(--rd-accent-gold)] ring-2 ring-[var(--rd-accent-gold)]/20 bg-[var(--rd-accent-gold)]/5'
                         : 'border-[var(--rd-border)] hover:border-[var(--rd-text-secondary)] bg-[var(--rd-bg-main)]'
                     }`}
                   >
@@ -113,7 +116,7 @@ export default function SettingsModal({ isOpen, onClose }) {
                     onClick={() => setTheme('system')}
                     className={`p-3 rounded-xl border flex flex-col items-center gap-2 transition-all cursor-pointer ${
                       theme === 'system'
-                        ? 'border-[var(--rd-accent-blue)] ring-2 ring-[var(--rd-accent-blue)]/20 bg-blue-500/5'
+                        ? 'border-[var(--rd-accent-gold)] ring-2 ring-[var(--rd-accent-gold)]/20 bg-[var(--rd-accent-gold)]/5'
                         : 'border-[var(--rd-border)] hover:border-[var(--rd-text-secondary)] bg-[var(--rd-bg-main)]'
                     }`}
                   >
@@ -158,7 +161,7 @@ export default function SettingsModal({ isOpen, onClose }) {
                     className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 text-xs font-semibold transition-colors cursor-pointer"
                   >
                     <LogOut className="w-4 h-4" />
-                    <span>Sign Out</span>
+                    <span>Sign out</span>
                   </button>
                 </div>
               </div>

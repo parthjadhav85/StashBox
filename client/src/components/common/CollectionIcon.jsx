@@ -22,12 +22,10 @@ import {
   Sparkles,
   Target,
   Box,
-  Compass,
-  Smile,
-  Shield,
-  Feather
+  Compass
 } from 'lucide-react'
 
+// Backward-compatibility map for legacy icon IDs
 export const COLLECTION_ICONS = [
   { id: 'folder', name: 'Folder', icon: Folder, defaultColor: '#3b82f6' },
   { id: 'cloud', name: 'Cloud', icon: Cloud, defaultColor: '#3b82f6' },
@@ -70,8 +68,28 @@ export const RAINDROP_COLORS = [
 
 export default function CollectionIcon({ icon, color, className = 'w-4 h-4' }) {
   const match = COLLECTION_ICONS.find(i => i.id === icon)
-  const IconComponent = match ? match.icon : Folder
-  const finalColor = color || match?.defaultColor || '#3b82f6'
 
-  return <IconComponent className={className} style={{ color: finalColor }} />
+  // 1. If legacy icon string ID matches old catalog
+  if (match) {
+    const IconComponent = match.icon
+    const finalColor = color || match.defaultColor || '#3b82f6'
+    return <IconComponent className={className} style={{ color: finalColor }} />
+  }
+
+  // 2. If modern Unicode Emoji string
+  if (icon && typeof icon === 'string' && icon.trim() && icon !== 'folder') {
+    return (
+      <span
+        className={`stashbox-emoji select-none shrink-0 ${className}`}
+        role="img"
+        aria-label="Collection emoji"
+        style={{ fontSize: '112%' }}
+      >
+        {icon.trim()}
+      </span>
+    )
+  }
+
+  // 3. Default fallback
+  return <Folder className={className} style={{ color: color || '#3b82f6' }} />
 }

@@ -26,6 +26,7 @@ export default function AppLayout() {
   const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false)
   const [parentForNewNested, setParentForNewNested] = useState(null)
   const [editingCollection, setEditingCollection] = useState(null)
+  const [collectionEditOptions, setCollectionEditOptions] = useState({})
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
 
   // Live Data State
@@ -306,11 +307,14 @@ export default function AppLayout() {
         }))}
         bookmarkCounts={bookmarkCounts}
         onOpenAddModal={() => setIsAddModalOpen(true)}
-        onOpenCollectionModal={() => {
-          setParentForNewNested(null)
+        onOpenCollectionModal={(parentId = null) => {
+          setParentForNewNested(parentId)
           setIsCollectionModalOpen(true)
         }}
-        onOpenCollectionEdit={(coll) => setEditingCollection(coll)}
+        onOpenCollectionEdit={(coll, options = {}) => {
+          setEditingCollection(coll)
+          setCollectionEditOptions(options)
+        }}
         onOpenSettings={() => setIsSettingsOpen(true)}
         isMobileOpen={isMobileSidebarOpen}
         setIsMobileOpen={setIsMobileSidebarOpen}
@@ -357,12 +361,19 @@ export default function AppLayout() {
             <BookmarkListPane
               bookmarks={displayedBookmarks}
               isLoading={isLoadingBookmarks}
+              viewTitle={currentTitle}
+              activeCollection={activeCollObj}
+              activeView={activeView}
               viewMode={viewMode}
+              setViewMode={setViewMode}
+              sortBy={sortBy}
+              setSortBy={setSortBy}
               selectedBookmarkId={selectedBookmark?.id}
               onSelectBookmark={(bm) => setSelectedBookmark(bm)}
               onEditBookmark={(bm) => setEditingBookmark(bm)}
               onToggleFavorite={handleToggleFavorite}
               onToggleArchive={handleToggleArchive}
+              onDeleteBookmark={handleDeleteBookmark}
               onOpenAddModal={() => setIsAddModalOpen(true)}
             />
           </div>
@@ -408,11 +419,15 @@ export default function AppLayout() {
 
       <CollectionEditModal
         isOpen={Boolean(editingCollection)}
-        onClose={() => setEditingCollection(null)}
+        onClose={() => {
+          setEditingCollection(null)
+          setCollectionEditOptions({})
+        }}
         collection={editingCollection}
         collections={collections}
         onUpdate={handleUpdateCollection}
         onDelete={handleDeleteCollection}
+        initialPickIcon={collectionEditOptions.initialPickIcon}
         onCreateNested={(parentId) => {
           setParentForNewNested(parentId)
           setIsCollectionModalOpen(true)

@@ -183,7 +183,7 @@ export default function HomePage() {
               About
             </Link>
             <a
-              href="https://github.com"
+              href="https://github.com/parthjadhav85"
               target="_blank"
               rel="noreferrer"
               className="hover:text-white transition-colors"
@@ -194,7 +194,7 @@ export default function HomePage() {
               </svg>
             </a>
             <a
-              href="mailto:contact@stashbox.dev"
+              href="mailto:parth.dev.contact@gmail.com"
               className="hover:text-white transition-colors"
               aria-label="Contact via email"
             >

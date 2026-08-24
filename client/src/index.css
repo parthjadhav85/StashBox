@@ -2,37 +2,47 @@
 
 @layer base {
   :root {
-    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', sans-serif;
     
-    /* Light Theme (Raindrop.io Reference) */
+    /* Light Theme (Raindrop Productivity Reference) */
     --rd-bg-main: #ffffff;
     --rd-bg-sidebar: #f5f6f8;
-    --rd-bg-hover: #eaecee;
+    --rd-bg-hover: #eceef1;
     --rd-bg-card: #ffffff;
-    --rd-border: #e3e5e8;
-    --rd-border-subtle: #eeeff1;
-    --rd-text-primary: #23272d;
-    --rd-text-secondary: #747d88;
-    --rd-text-muted: #959da5;
-    --rd-accent-active: #eb4d4b;
-    --rd-accent-blue: #3b82f6;
+    --rd-border: #e2e5e9;
+    --rd-border-subtle: #eeeff2;
+    --rd-border-hover: #cbd1d8;
+    --rd-text-primary: #1f2328;
+    --rd-text-secondary: #656d76;
+    --rd-text-muted: #8c959f;
+    --rd-accent-gold: #d9971e;
+    --rd-accent-gold-hover: #c48616;
+    --rd-accent-gold-text: #ffffff;
+    --rd-item-active-bg: #e6e8ec;
+    --rd-item-active-text: #111215;
+    --rd-accent-blue: #2563eb;
     --rd-toolbar-bg: #ffffff;
   }
 
   .dark {
-    /* Dark Theme (Raindrop.io Reference) */
-    --rd-bg-main: #191a1c;
-    --rd-bg-sidebar: #222326;
-    --rd-bg-hover: #2b2d31;
-    --rd-bg-card: #222427;
-    --rd-border: #2d3035;
-    --rd-border-subtle: #26282c;
-    --rd-text-primary: #dcdee2;
-    --rd-text-secondary: #8c939d;
-    --rd-text-muted: #626871;
-    --rd-accent-active: #eb4d4b;
+    /* Dark Theme (Raindrop Productivity Precision Tokens) */
+    --rd-bg-main: #18191c;
+    --rd-bg-sidebar: #131416;
+    --rd-bg-hover: #222327;
+    --rd-bg-card: #202125;
+    --rd-border: #292a2f;
+    --rd-border-subtle: #222327;
+    --rd-border-hover: #363840;
+    --rd-text-primary: #e6e8ec;
+    --rd-text-secondary: #8e94a0;
+    --rd-text-muted: #646974;
+    --rd-accent-gold: #e5a823;
+    --rd-accent-gold-hover: #f5b731;
+    --rd-accent-gold-text: #0d0e10;
+    --rd-item-active-bg: #27282d;
+    --rd-item-active-text: #ffffff;
     --rd-accent-blue: #3b82f6;
-    --rd-toolbar-bg: #1e1f22;
+    --rd-toolbar-bg: #18191c;
   }
 
   body {
@@ -45,10 +55,23 @@
   }
 }
 
+/* Polished Native Emoji Rendering */
+.stashbox-emoji {
+  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', sans-serif;
+  font-style: normal;
+  line-height: 1;
+  vertical-align: middle;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
 /* Custom Raindrop-style Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -56,18 +79,18 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(120, 120, 120, 0.25);
+  background: rgba(140, 145, 155, 0.2);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(120, 120, 120, 0.45);
+  background: rgba(140, 145, 155, 0.4);
 }
 
 /* Masonry Columns Styling */
 .masonry-grid {
   column-count: 1;
-  column-gap: 14px;
+  column-gap: 12px;
 }
 
 @media (min-width: 640px) {
@@ -96,5 +119,5 @@
 
 .masonry-item {
   break-inside: avoid;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }

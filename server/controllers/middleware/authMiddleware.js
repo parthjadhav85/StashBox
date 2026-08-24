@@ -1,0 +1,42 @@
+import { supabase, getSupabaseClient } from '../config/supabase.js'
+
+export const authenticateUser = async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({
+        message: 'Authentication required'
+      })
+    }
+
+    const token = authHeader.split(' ')[1]
+
+    if (!token) {
+      return res.status(401).json({
+        message: 'Authentication token missing'
+      })
+    }
+
+    const {
+      data: { user },
+      error
+    } = await supabase.auth.getUser(token)
+
+    if (error || !user) {
+      return res.status(401).json({
+        message: 'Invalid or expired session'
+      })
+    }
+
+    req.user = user
+    req.token = token
+    req.supabase = getSupabaseClient(token)
+
+    next()
+  } catch (error) {
+    res.status(500).json({
+      message: 'Authentication error'
+    })
+  }
+}

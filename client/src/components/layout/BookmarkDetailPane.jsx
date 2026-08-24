@@ -4,11 +4,7 @@ import {
   ExternalLink,
   Heart,
   Trash2,
-  Share2,
-  Maximize2,
-  Folder,
   Globe,
-  Clock,
   Archive,
   ArchiveRestore,
   Type,
@@ -58,9 +54,17 @@ export default function BookmarkDetailPane({
     else setFontSize('sm')
   }
 
+  const formattedDate = bookmark.created_at
+    ? new Date(bookmark.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    : 'Recently'
+
+  const savedDateText = bookmark.created_at
+    ? ` on ${new Date(bookmark.created_at).toLocaleDateString()}`
+    : ''
+
   return (
     <aside className="w-full lg:w-[480px] xl:w-[540px] border-l border-[var(--rd-border)] bg-[var(--rd-bg-card)] flex flex-col justify-between h-[calc(100vh-44px)] overflow-hidden select-text flex-shrink-0">
-      {/* Top Toolbar (Raindrop Screenshot 4 Replica) */}
+      {/* Top Toolbar */}
       <div className="h-11 px-4 border-b border-[var(--rd-border)] bg-[var(--rd-toolbar-bg)] flex items-center justify-between gap-2 flex-shrink-0 select-none">
         {/* Left: View Tabs */}
         <div className="flex items-center gap-1.5">
@@ -69,7 +73,7 @@ export default function BookmarkDetailPane({
             onClick={() => setActiveTab('article')}
             className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
               activeTab === 'article'
-                ? 'bg-[var(--rd-accent-active)] text-white shadow-xs'
+                ? 'bg-[var(--rd-accent-gold)] text-[var(--rd-accent-gold-text)] shadow-2xs'
                 : 'text-[var(--rd-text-secondary)] hover:text-[var(--rd-text-primary)] hover:bg-[var(--rd-bg-hover)]'
             }`}
           >
@@ -101,7 +105,7 @@ export default function BookmarkDetailPane({
             disabled={isRefreshing}
             onClick={handleRefresh}
             className={`p-1.5 rounded-lg hover:text-[var(--rd-text-primary)] hover:bg-[var(--rd-bg-hover)] transition-colors cursor-pointer ${
-              isRefreshing ? 'animate-spin text-[var(--rd-accent-blue)]' : ''
+              isRefreshing ? 'animate-spin text-[var(--rd-accent-gold)]' : ''
             }`}
             title="Refresh Page Metadata & Cover"
           >
@@ -151,7 +155,7 @@ export default function BookmarkDetailPane({
         </div>
       </div>
 
-      {/* Reader Body (Raindrop Screenshot 4 Reading Experience) */}
+      {/* Reader Body */}
       <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6">
         {/* Domain & Date Eyebrow */}
         <div className="flex items-center gap-2 text-xs text-[var(--rd-text-secondary)] font-medium">
@@ -162,15 +166,15 @@ export default function BookmarkDetailPane({
           )}
           <span className="font-semibold text-[var(--rd-text-primary)]">{bookmark.domain}</span>
           <span>•</span>
-          <span>{new Date(bookmark.created_at || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+          <span>{formattedDate}</span>
         </div>
 
         {/* Large Article Headline */}
-        <h1 className="text-xl sm:text-2xl font-black tracking-tight text-[var(--rd-text-primary)] leading-tight">
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--rd-text-primary)] leading-tight">
           {bookmark.title || bookmark.url}
         </h1>
 
-        {/* Hero Cover Image (Real Scraped Preview Image) */}
+        {/* Hero Cover Image */}
         {bookmark.preview_image_url && (
           <div className="rounded-xl overflow-hidden border border-[var(--rd-border)] bg-[var(--rd-bg-hover)]">
             <img
@@ -192,12 +196,12 @@ export default function BookmarkDetailPane({
           ) : null}
 
           <p className="text-[var(--rd-text-secondary)] text-xs italic">
-            Saved to {bookmark.collections?.name || 'Unsorted'} on {new Date(bookmark.created_at || Date.now()).toLocaleDateString()}.
+            Saved to {bookmark.collections?.name || 'Unsorted'}{savedDateText}.
           </p>
         </div>
       </div>
 
-      {/* Reader Bottom Bar (Raindrop Aa Font Adjuster + Source Link) */}
+      {/* Reader Bottom Bar */}
       <div className="h-12 px-6 border-t border-[var(--rd-border)] bg-[var(--rd-toolbar-bg)] flex items-center justify-between text-xs text-[var(--rd-text-secondary)] flex-shrink-0 select-none">
         {/* Source link */}
         <a
