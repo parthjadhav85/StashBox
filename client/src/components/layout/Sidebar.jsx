@@ -152,7 +152,7 @@ export default function Sidebar({
 
           {/* Right: Dedicated Three-Dot Pill Button + Count Badge */}
           <div className="flex items-center gap-1.5 flex-shrink-0">
-            {/* Three-Dot Action Button (Matches Raindrop screenshot media_1787604381364.png) */}
+            {/* Three-Dot Action Button (Matches Raindrop screenshot) */}
             <button
               type="button"
               onClick={(e) => {
@@ -247,35 +247,50 @@ export default function Sidebar({
               </button>
             </div>
 
-            {/* Profile Dropdown Menu */}
+            {/* Profile Dropdown Menu with Hairline Separators */}
             {isProfileMenuOpen && (
-              <div className="absolute top-13 left-2 right-2 bg-[var(--rd-bg-card)] border border-[var(--rd-border)] rounded-xl shadow-2xl p-1.5 z-50 text-[13px]">
-                <div className="px-3 py-2 border-b border-[var(--rd-border-subtle)] mb-1">
+              <div className="absolute top-13 left-2 right-2 bg-[var(--rd-bg-card)] border border-[var(--rd-border)] rounded-xl shadow-2xl p-1.5 z-50 text-[13.5px] select-none animate-in zoom-in-95 duration-100">
+                {/* Group 1: User Identity */}
+                <div className="px-3 py-2">
                   <p className="font-semibold text-[var(--rd-text-primary)] truncate">{displayName}</p>
-                  <p className="text-[11.5px] text-[var(--rd-text-muted)] truncate">{user?.email}</p>
+                  <p className="text-[12px] text-[var(--rd-text-muted)] truncate mt-0.5">{user?.email}</p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsProfileMenuOpen(false)
-                    onOpenSettings?.()
-                  }}
-                  className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[var(--rd-text-primary)] hover:bg-[var(--rd-bg-hover)] transition-colors cursor-pointer"
-                >
-                  <Settings className="w-4 h-4 text-[var(--rd-text-secondary)]" />
-                  <span>Settings & Appearance</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsProfileMenuOpen(false)
-                    logout?.()
-                  }}
-                  className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-rose-500 hover:bg-rose-500/10 transition-colors cursor-pointer"
-                >
-                  <LogOut className="w-4 h-4" />
-                  <span>Sign out</span>
-                </button>
+
+                {/* Hairline Separator */}
+                <div className="border-t border-[var(--rd-divider)] my-1" />
+
+                {/* Group 2: Preferences */}
+                <div className="py-0.5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsProfileMenuOpen(false)
+                      onOpenSettings?.()
+                    }}
+                    className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-[var(--rd-text-primary)] hover:bg-[var(--rd-bg-hover)] transition-colors cursor-pointer text-left"
+                  >
+                    <Settings className="w-4 h-4 text-[var(--rd-text-secondary)]" />
+                    <span>Settings & Appearance</span>
+                  </button>
+                </div>
+
+                {/* Hairline Separator */}
+                <div className="border-t border-[var(--rd-divider)] my-1" />
+
+                {/* Group 3: Account Sign Out */}
+                <div className="py-0.5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsProfileMenuOpen(false)
+                      logout?.()
+                    }}
+                    className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors cursor-pointer text-left"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Sign out</span>
+                  </button>
+                </div>
               </div>
             )}
           </div>
@@ -451,10 +466,10 @@ export default function Sidebar({
           style={{
             position: 'fixed',
             top: `${Math.min(activeMenu.anchorRect.bottom + 4, window.innerHeight - 260)}px`,
-            left: `${Math.max(8, Math.min(activeMenu.anchorRect.left, window.innerWidth - 210))}px`,
+            left: `${Math.max(8, Math.min(activeMenu.anchorRect.left, window.innerWidth - 220))}px`,
             zIndex: 9999
           }}
-          className="w-52 bg-[var(--rd-bg-card)] border border-[var(--rd-border)] rounded-xl shadow-2xl py-1.5 text-[13.5px] text-[var(--rd-text-primary)] animate-in zoom-in-95 duration-100 select-none"
+          className="w-52 bg-[var(--rd-bg-card)] border border-[var(--rd-border)] rounded-xl shadow-2xl p-1.5 text-[13.5px] text-[var(--rd-text-primary)] animate-in zoom-in-95 duration-100 select-none"
         >
           {/* Group 1: Open all bookmarks, Create nested collection */}
           <div className="py-0.5">
@@ -464,7 +479,7 @@ export default function Sidebar({
                 handleSelectCollection(activeMenu.coll.id)
                 setActiveMenu(null)
               }}
-              className="w-full px-3.5 py-1.5 hover:bg-white/10 text-left cursor-pointer transition-colors"
+              className="w-full px-3 py-1.5 rounded-md hover:bg-white/10 text-left cursor-pointer transition-colors"
             >
               Open all bookmarks
             </button>
@@ -474,13 +489,13 @@ export default function Sidebar({
                 onOpenCollectionModal?.(activeMenu.coll.id)
                 setActiveMenu(null)
               }}
-              className="w-full px-3.5 py-1.5 hover:bg-white/10 text-left cursor-pointer transition-colors"
+              className="w-full px-3 py-1.5 rounded-md hover:bg-white/10 text-left cursor-pointer transition-colors"
             >
               Create nested collection
             </button>
           </div>
 
-          <div className="border-t border-[var(--rd-border-subtle)] my-1" />
+          <div className="border-t border-[var(--rd-divider)] my-1" />
 
           {/* Group 2: Select, Rename, Change icon */}
           <div className="py-0.5">
@@ -490,7 +505,7 @@ export default function Sidebar({
                 handleSelectCollection(activeMenu.coll.id)
                 setActiveMenu(null)
               }}
-              className="w-full px-3.5 py-1.5 hover:bg-white/10 text-left cursor-pointer transition-colors"
+              className="w-full px-3 py-1.5 rounded-md hover:bg-white/10 text-left cursor-pointer transition-colors"
             >
               Select
             </button>
@@ -500,7 +515,7 @@ export default function Sidebar({
                 onOpenCollectionEdit?.(activeMenu.coll, { initialPickIcon: false })
                 setActiveMenu(null)
               }}
-              className="w-full px-3.5 py-1.5 hover:bg-white/10 text-left cursor-pointer transition-colors"
+              className="w-full px-3 py-1.5 rounded-md hover:bg-white/10 text-left cursor-pointer transition-colors"
             >
               Rename
             </button>
@@ -510,13 +525,13 @@ export default function Sidebar({
                 onOpenCollectionEdit?.(activeMenu.coll, { initialPickIcon: true })
                 setActiveMenu(null)
               }}
-              className="w-full px-3.5 py-1.5 hover:bg-white/10 text-left cursor-pointer transition-colors"
+              className="w-full px-3 py-1.5 rounded-md hover:bg-white/10 text-left cursor-pointer transition-colors"
             >
               Change icon
             </button>
           </div>
 
-          <div className="border-t border-[var(--rd-border-subtle)] my-1" />
+          <div className="border-t border-[var(--rd-divider)] my-1" />
 
           {/* Group 3: Delete (Soft destructive red) */}
           <div className="py-0.5">
@@ -526,7 +541,7 @@ export default function Sidebar({
                 onOpenCollectionEdit?.(activeMenu.coll)
                 setActiveMenu(null)
               }}
-              className="w-full px-3.5 py-1.5 hover:bg-rose-500/10 text-rose-500 text-left cursor-pointer transition-colors font-medium"
+              className="w-full px-3 py-1.5 rounded-md hover:bg-rose-500/10 text-rose-400 hover:text-rose-300 text-left cursor-pointer transition-colors font-medium"
             >
               Delete
             </button>

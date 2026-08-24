@@ -9,6 +9,8 @@ import {
   X
 } from 'lucide-react'
 
+import SessionVerificationScreen from '../common/SessionVerificationScreen.jsx'
+
 export default function AuthCard({ initialMode = 'login' }) {
   const [mode, setMode] = useState(initialMode)
   const [email, setEmail] = useState('')
@@ -25,7 +27,11 @@ export default function AuthCard({ initialMode = 'login' }) {
 
   const from = location.state?.from?.pathname || '/app'
 
-  if (isAuthenticated && !isLoading) {
+  if (isLoading) {
+    return <SessionVerificationScreen />
+  }
+
+  if (isAuthenticated) {
     return <Navigate to="/app" replace />
   }
 

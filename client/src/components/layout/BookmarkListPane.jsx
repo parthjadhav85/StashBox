@@ -397,7 +397,7 @@ export default function BookmarkListPane({
                   `}
                 >
                   {/* Thumbnail / Cover Box */}
-                  <div className="w-full h-44 sm:h-48 relative overflow-hidden bg-[#16171a] flex items-center justify-center flex-shrink-0">
+                  <div className="w-full h-44 sm:h-48 relative overflow-hidden bg-[var(--rd-toolbar-bg)] flex items-center justify-center flex-shrink-0">
                     {hasValidCover ? (
                       <img
                         src={bm.preview_image_url}

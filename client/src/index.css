@@ -4,19 +4,28 @@
   :root {
     --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', sans-serif;
     
-    /* Light Theme (Raindrop Productivity Reference) */
+    /* Light Theme Reference */
+    --bg-main: #ffffff;
+    --bg-sidebar: #f5f6f8;
+    --bg-toolbar: #ffffff;
+    --text-primary: #1f2328;
+    --text-muted: #656d76;
+    --accent-gold: #cfa85b;
+    --border-divider: #e2e5e9;
+
     --rd-bg-main: #ffffff;
     --rd-bg-sidebar: #f5f6f8;
     --rd-bg-hover: #eceef1;
     --rd-bg-card: #ffffff;
     --rd-border: #e2e5e9;
     --rd-border-subtle: #eeeff2;
+    --rd-divider: #e2e5e9;
     --rd-border-hover: #cbd1d8;
     --rd-text-primary: #1f2328;
     --rd-text-secondary: #656d76;
     --rd-text-muted: #8c959f;
-    --rd-accent-gold: #d9971e;
-    --rd-accent-gold-hover: #c48616;
+    --rd-accent-gold: #cfa85b;
+    --rd-accent-gold-hover: #b89345;
     --rd-accent-gold-text: #ffffff;
     --rd-item-active-bg: #e6e8ec;
     --rd-item-active-text: #111215;
@@ -25,24 +34,34 @@
   }
 
   .dark {
-    /* Dark Theme (Raindrop Productivity Precision Tokens) */
-    --rd-bg-main: #18191c;
-    --rd-bg-sidebar: #131416;
-    --rd-bg-hover: #222327;
-    --rd-bg-card: #202125;
-    --rd-border: #292a2f;
-    --rd-border-subtle: #222327;
-    --rd-border-hover: #363840;
-    --rd-text-primary: #e6e8ec;
-    --rd-text-secondary: #8e94a0;
-    --rd-text-muted: #646974;
-    --rd-accent-gold: #e5a823;
-    --rd-accent-gold-hover: #f5b731;
-    --rd-accent-gold-text: #0d0e10;
-    --rd-item-active-bg: #27282d;
-    --rd-item-active-text: #ffffff;
+    /* Raindrop Productivity Precision Dark Baseline Palette */
+    --bg-main: #2A2B2D;
+    --bg-sidebar: #232325;
+    --bg-toolbar: #1D1E1F;
+    --text-primary: #E5E5E6;
+    --text-muted: #96979C;
+    --accent-gold: #DCC28F;
+    --border-divider: #3F3F41;
+
+    /* Semantic Application Tokens */
+    --rd-bg-main: #2A2B2D;
+    --rd-bg-sidebar: #232325;
+    --rd-toolbar-bg: #1D1E1F;
+    --rd-bg-card: #232325;
+    --rd-bg-hover: #323336;
+    --rd-border: #3F3F41;
+    --rd-border-subtle: #3F3F41;
+    --rd-divider: #3F3F41;
+    --rd-border-hover: #525255;
+    --rd-text-primary: #E5E5E6;
+    --rd-text-secondary: #96979C;
+    --rd-text-muted: #96979C;
+    --rd-accent-gold: #DCC28F;
+    --rd-accent-gold-hover: #E5CCA0;
+    --rd-accent-gold-text: #1D1E1F;
+    --rd-item-active-bg: #36373A;
+    --rd-item-active-text: #FFFFFF;
     --rd-accent-blue: #3b82f6;
-    --rd-toolbar-bg: #18191c;
   }
 
   body {
@@ -68,7 +87,7 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* Custom Raindrop-style Scrollbar */
+/* Custom Productivity Scrollbar */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
@@ -79,18 +98,18 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(140, 145, 155, 0.2);
+  background: rgba(150, 151, 156, 0.25);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(140, 145, 155, 0.4);
+  background: rgba(150, 151, 156, 0.45);
 }
 
 /* Masonry Columns Styling */
 .masonry-grid {
   column-count: 1;
-  column-gap: 12px;
+  column-gap: 16px;
 }
 
 @media (min-width: 640px) {
@@ -119,5 +138,5 @@
 
 .masonry-item {
   break-inside: avoid;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }

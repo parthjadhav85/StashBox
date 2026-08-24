@@ -23,7 +23,6 @@ export default function CollectionEditModal({
   const { resolvedTheme } = useTheme()
   const [title, setTitle] = useState('')
   const [selectedIcon, setSelectedIcon] = useState('📁')
-  const [selectedColor, setSelectedColor] = useState('#e5a823')
   const [parentId, setParentId] = useState('')
   const [isPickingIcon, setIsPickingIcon] = useState(Boolean(initialPickIcon))
   const [isDeleting, setIsDeleting] = useState(false)
@@ -32,7 +31,6 @@ export default function CollectionEditModal({
     if (collection) {
       setTitle(collection.name || '')
       setSelectedIcon(collection.icon || '📁')
-      setSelectedColor(collection.color || '#e5a823')
       setParentId(collection.parent_id || '')
       setIsPickingIcon(Boolean(initialPickIcon))
     }
@@ -49,7 +47,7 @@ export default function CollectionEditModal({
     onUpdate?.(collection.id, {
       name: title.trim(),
       icon: selectedIcon,
-      color: selectedColor,
+      color: '#e5a823',
       parent_id: parentId || null
     })
     onClose()
@@ -155,12 +153,11 @@ export default function CollectionEditModal({
             {/* Big Icon Preview */}
             <div className="flex justify-center">
               <div
-                className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-md transition-transform hover:scale-105 cursor-pointer text-2xl"
-                style={{ backgroundColor: `${selectedColor}20` }}
+                className="w-16 h-16 rounded-2xl bg-[var(--rd-bg-main)] border border-[var(--rd-border)] flex items-center justify-center shadow-xs transition-transform hover:scale-105 cursor-pointer text-2xl"
                 onClick={() => setIsPickingIcon(true)}
                 title="Click to change emoji"
               >
-                <CollectionIcon icon={selectedIcon} color={selectedColor} className="w-8 h-8" />
+                <CollectionIcon icon={selectedIcon} className="w-8 h-8" />
               </div>
             </div>
 
@@ -179,23 +176,25 @@ export default function CollectionEditModal({
             </div>
 
             {/* Parent Collection Selector */}
-            <div>
-              <label className="block text-[11px] font-semibold text-[var(--rd-text-secondary)] mb-1">
-                Parent Collection
-              </label>
-              <select
-                value={parentId}
-                onChange={(e) => setParentId(e.target.value)}
-                className="w-full px-3 py-2 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] rounded-xl text-xs sm:text-sm text-[var(--rd-text-primary)] focus:border-[var(--rd-accent-gold)] focus:outline-none focus:ring-1 focus:ring-[var(--rd-accent-gold)]/30 cursor-pointer"
-              >
-                <option value="">None (Top-Level Root)</option>
-                {availableParents.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {availableParents.length > 0 && (
+              <div>
+                <label className="block text-[11px] font-semibold text-[var(--rd-text-secondary)] mb-1">
+                  Parent Collection
+                </label>
+                <select
+                  value={parentId}
+                  onChange={(e) => setParentId(e.target.value)}
+                  className="w-full px-3 py-2 bg-[var(--rd-bg-main)] border border-[var(--rd-border)] rounded-xl text-xs sm:text-sm text-[var(--rd-text-primary)] focus:border-[var(--rd-accent-gold)] focus:outline-none focus:ring-1 focus:ring-[var(--rd-accent-gold)]/30 cursor-pointer"
+                >
+                  <option value="">None (Top-Level Root)</option>
+                  {availableParents.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             {/* Action Links */}
             <div className="space-y-1.5 text-xs font-medium border-t border-[var(--rd-border)] pt-2.5">
