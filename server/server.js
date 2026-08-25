@@ -19,7 +19,7 @@ app.use((req, res, next) => {
   next()
 })
 
-// Safe CORS Configuration
+// CORS Configuration
 const allowedOrigins = [
   'http://localhost:3000',
   'http://127.0.0.1:3000',
@@ -29,12 +29,12 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (e.g. mobile apps, curl, server-to-server) or matched origins
+      // Allow requests without an Origin header, such as server-to-server requests.
       if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true)
-      } else {
-        callback(null, true) // fallback for development flexibility
+        return callback(null, true)
       }
+
+      return callback(new Error('Not allowed by CORS'))
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
@@ -64,6 +64,7 @@ app.use('/api/auth', authLimiter, authRoutes)
 app.use('/api/collections', apiLimiter, collectionRoutes)
 app.use('/api/bookmarks', apiLimiter, bookmarkRoutes)
 
+// Health Check
 app.get('/', (req, res) => {
   res.json({
     message: 'Stashbox API is running',
@@ -71,14 +72,16 @@ app.get('/', (req, res) => {
   })
 })
 
-// Global Error Handler to prevent leaking stack traces
+// Global Error Handler
 app.use((err, req, res, next) => {
   console.error('Unhandled server error:', err.message)
+
   res.status(err.status || 500).json({
     message: err.message || 'Internal server error'
   })
 })
 
+// Server
 const PORT = process.env.PORT || 5000
 
 app.listen(PORT, '0.0.0.0', () => {
