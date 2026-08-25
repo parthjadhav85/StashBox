@@ -12,6 +12,93 @@ Users can save bookmarks, automatically enrich them with webpage metadata, organ
 
 The application is designed as a real full-stack system rather than a frontend-only CRUD project, with separated client and server applications, authenticated API access, database-level authorization, and independent production deployment.
 
+## Live Demo
+
+<div align="center">
+
+<a href="https://stash-box-three.vercel.app/">
+  <img src="https://img.shields.io/badge/Live%20Demo-StashBox-DCC28F?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" />
+</a>
+
+</div>
+
+---
+
+## Screenshots
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <a href="./screenshots/landing.png">
+        <img src="./screenshots/landing.png" alt="StashBox Landing Page" width="460"/>
+      </a>
+      <br />
+      <strong>Landing Page</strong>
+    </td>
+    <td align="center" width="50%">
+      <a href="./screenshots/auth.png">
+        <img src="./screenshots/auth.png" alt="StashBox Authentication" width="460"/>
+      </a>
+      <br />
+      <strong>Authentication</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center" width="50%">
+      <a href="./screenshots/dashboard.png">
+        <img src="./screenshots/dashboard.png" alt="StashBox Dashboard" width="460"/>
+      </a>
+      <br />
+      <strong>Dashboard</strong>
+    </td>
+    <td align="center" width="50%">
+      <a href="./screenshots/dashboard-full-view.png">
+        <img src="./screenshots/dashboard-full-view.png" alt="StashBox Full Dashboard View" width="460"/>
+      </a>
+      <br />
+      <strong>Full Dashboard</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center" width="50%">
+      <a href="./screenshots/list-view.png">
+        <img src="./screenshots/list-view.png" alt="StashBox List View" width="460"/>
+      </a>
+      <br />
+      <strong>List View</strong>
+    </td>
+    <td align="center" width="50%">
+      <a href="./screenshots/collections.png">
+        <img src="./screenshots/collections.png" alt="StashBox Collections" width="460"/>
+      </a>
+      <br />
+      <strong>Collections</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center" width="50%">
+      <a href="./screenshots/add-bookmark.png">
+        <img src="./screenshots/add-bookmark.png" alt="StashBox Add Bookmark" width="460"/>
+      </a>
+      <br />
+      <strong>Add Bookmark</strong>
+    </td>
+    <td align="center" width="50%">
+      <a href="./screenshots/settings.png">
+        <img src="./screenshots/settings.png" alt="StashBox Settings" width="460"/>
+      </a>
+      <br />
+      <strong>Settings</strong>
+    </td>
+  </tr>
+</table>
+
+> Click any screenshot to open the full-resolution image.
+
+
 ## Features
 
 ### Bookmark Management
