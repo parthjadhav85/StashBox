@@ -67,8 +67,6 @@ These capabilities are implemented in the current application.
 | Deployment       | Vercel + Render + Supabase       |
 | Tooling          | ESLint, Nodemon, Git             |
 
-The technologies above are based on the project's verified dependencies and deployment architecture.
-
 ## Architecture
 
 ```mermaid
@@ -303,8 +301,6 @@ PORT=
 ```env
 VITE_API_URL=
 ```
-
-Never commit real credentials or environment secrets to the repository.
 
 ## Production Deployment
 
