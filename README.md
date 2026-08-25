@@ -26,87 +26,78 @@ The application is designed as a real full-stack system rather than a frontend-o
 
 ## Screenshots
 
-### Landing Page
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <a href="./screenshots/landing.png">
+        <img src="./screenshots/landing.png" alt="StashBox Landing Page" width="460"/>
+      </a>
+      <br />
+      <strong>Landing Page</strong>
+    </td>
+    <td align="center" width="50%">
+      <a href="./screenshots/auth.png">
+        <img src="./screenshots/auth.png" alt="StashBox Authentication" width="460"/>
+      </a>
+      <br />
+      <strong>Authentication</strong>
+    </td>
+  </tr>
 
-<div align="center">
-  <img
-    src="./screenshots/landing.png"
-    alt="StashBox Landing Page"
-    width="1000"
-  />
-</div>
+  <tr>
+    <td align="center" width="50%">
+      <a href="./screenshots/dashboard.png">
+        <img src="./screenshots/dashboard.png" alt="StashBox Dashboard" width="460"/>
+      </a>
+      <br />
+      <strong>Dashboard</strong>
+    </td>
+    <td align="center" width="50%">
+      <a href="./screenshots/dashboard-full-view.png">
+        <img src="./screenshots/dashboard-full-view.png" alt="StashBox Full Dashboard View" width="460"/>
+      </a>
+      <br />
+      <strong>Full Dashboard</strong>
+    </td>
+  </tr>
 
-<br />
+  <tr>
+    <td align="center" width="50%">
+      <a href="./screenshots/list-view.png">
+        <img src="./screenshots/list-view.png" alt="StashBox List View" width="460"/>
+      </a>
+      <br />
+      <strong>List View</strong>
+    </td>
+    <td align="center" width="50%">
+      <a href="./screenshots/collections.png">
+        <img src="./screenshots/collections.png" alt="StashBox Collections" width="460"/>
+      </a>
+      <br />
+      <strong>Collections</strong>
+    </td>
+  </tr>
 
-### Dashboard
+  <tr>
+    <td align="center" width="50%">
+      <a href="./screenshots/add-bookmark.png">
+        <img src="./screenshots/add-bookmark.png" alt="StashBox Add Bookmark" width="460"/>
+      </a>
+      <br />
+      <strong>Add Bookmark</strong>
+    </td>
+    <td align="center" width="50%">
+      <a href="./screenshots/settings.png">
+        <img src="./screenshots/settings.png" alt="StashBox Settings" width="460"/>
+      </a>
+      <br />
+      <strong>Settings</strong>
+    </td>
+  </tr>
+</table>
 
-<div align="center">
-  <img
-    src="./screenshots/dashboard.png"
-    alt="StashBox Dashboard"
-    width="1100"
-  />
-</div>
+> Click any screenshot to open the full-resolution image.
 
-<br />
-
-### List View
-
-<div align="center">
-  <img
-    src="./screenshots/list-view.png"
-    alt="StashBox List View"
-    width="1100"
-  />
-</div>
-
-<br />
-
-### Collection Management
-
-<div align="center">
-  <img
-    src="./screenshots/collections.png"
-    alt="StashBox Collections"
-    width="900"
-  />
-</div>
-
-<br />
-
-### Mobile Experience
-
-<div align="center">
-  <img
-    src="./screenshots/mobile.png"
-    alt="StashBox Mobile Experience"
-    width="450"
-  />
-</div>
-
-<br />
-
-### Additional Views
-
-<div align="center">
-  <img
-    src="./screenshots/add-bookmark.png"
-    alt="Add Bookmark"
-    width="700"
-  />
-  <br /><br />
-  <img
-    src="./screenshots/settings.png"
-    alt="StashBox Settings"
-    width="700"
-  />
-  <br /><br />
-  <img
-    src="./screenshots/auth.png"
-    alt="StashBox Authentication"
-    width="700"
-  />
-</div>
 
 ## Features
 
