@@ -12,6 +12,102 @@ Users can save bookmarks, automatically enrich them with webpage metadata, organ
 
 The application is designed as a real full-stack system rather than a frontend-only CRUD project, with separated client and server applications, authenticated API access, database-level authorization, and independent production deployment.
 
+## Live Demo
+
+<div align="center">
+
+<a href="https://stash-box-three.vercel.app/">
+  <img src="https://img.shields.io/badge/Live%20Demo-StashBox-DCC28F?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" />
+</a>
+
+</div>
+
+---
+
+## Screenshots
+
+### Landing Page
+
+<div align="center">
+  <img
+    src="./screenshots/landing.png"
+    alt="StashBox Landing Page"
+    width="1000"
+  />
+</div>
+
+<br />
+
+### Dashboard
+
+<div align="center">
+  <img
+    src="./screenshots/dashboard.png"
+    alt="StashBox Dashboard"
+    width="1100"
+  />
+</div>
+
+<br />
+
+### List View
+
+<div align="center">
+  <img
+    src="./screenshots/list-view.png"
+    alt="StashBox List View"
+    width="1100"
+  />
+</div>
+
+<br />
+
+### Collection Management
+
+<div align="center">
+  <img
+    src="./screenshots/collections.png"
+    alt="StashBox Collections"
+    width="900"
+  />
+</div>
+
+<br />
+
+### Mobile Experience
+
+<div align="center">
+  <img
+    src="./screenshots/mobile.png"
+    alt="StashBox Mobile Experience"
+    width="450"
+  />
+</div>
+
+<br />
+
+### Additional Views
+
+<div align="center">
+  <img
+    src="./screenshots/add-bookmark.png"
+    alt="Add Bookmark"
+    width="700"
+  />
+  <br /><br />
+  <img
+    src="./screenshots/settings.png"
+    alt="StashBox Settings"
+    width="700"
+  />
+  <br /><br />
+  <img
+    src="./screenshots/auth.png"
+    alt="StashBox Authentication"
+    width="700"
+  />
+</div>
+
 ## Features
 
 ### Bookmark Management
